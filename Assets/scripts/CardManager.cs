@@ -14,20 +14,11 @@ public class CardManager : MonoBehaviour {
     private string infoCard ="";
 
 	// Use this for initialization
-	void Start () {
-        
+    void Start()
+    {
+
         gameObject = GameObject.Find("CardNetworkManager");
         cardNetworkManager = gameObject.GetComponent<CardNetworkManager>();
-	}
-
-    void OnGUI()
-    {
-        if(GUI.Button(new Rect(200, 0, 100, 50), "Add Card"))
-        {
-            cardNetworkManager.sendCardRequest(cardType.ToString(), name);
-        }
-
-        GUI.Box(new Rect(200, 100, 300, 200), infoCard);
     }
         
 
@@ -36,5 +27,11 @@ public class CardManager : MonoBehaviour {
         attack = obtainedAttack;
         defense = obtainedDefense;
         infoCard += "succeeded, attack: " + attack + " , defense " + defense + "\n"; 
+    }
+
+    void OnMouseDown()
+    {
+        
+
     }
 }
