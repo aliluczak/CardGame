@@ -5,6 +5,8 @@ public class CardManager : MonoBehaviour {
 
     public enum CardType { HERO, SKILL, BOOSTER };
     public CardType cardType;
+	public enum CardSubType {MAGE, TANK, WARRIOR, COMMON};
+	public CardSubType cardSubType;
     public int attack;
     public int defense;
     public Sprite[] textures;

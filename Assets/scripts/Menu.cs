@@ -20,10 +20,11 @@ public class Menu : MonoBehaviour {
 	private bool toggleTank = false;
 
     //needed objects
-    private GameObject gameObject;
+	private GameObject gameObject;
     private GameObject networkManager;
     private CardNetworkManager cardNetworkManager;
     private CardManager cardManager;
+	//private Card card;
 
     //functions for menu and cardnetwork manager
     
@@ -158,10 +159,16 @@ public class Menu : MonoBehaviour {
 						toggleMage = GUI.Toggle (new Rect (25, 25, 100, 30), toggleMage, "Mage");
 						toggleTank = GUI.Toggle( new Rect (25, 25, 100, 30), toggleTank, "Tank");
 						toggleWarrior = GUI.Toggle( new Rect (25, 25, 100, 30), toggleWarrior, "Warrior");
-						if (toggleMage == false) {}
-						if (toggleTank == false) {}
-						if (toggleWarrior == false) {}
-						cardNetworkManager.sendCardRequest(cardType, gameObjectName);
+						if (toggleMage == true) {
+							cardManager.cardSubType = "MAGE";
+						}
+						if (toggleTank == true) {
+							cardManager.cardSubType = "TANK";
+						}
+						if (toggleWarrior == true) {
+							cardManager.cardSubType = "TANK";
+						}
+						cardNetworkManager.sendCardRequest("HERO", gameObjectName);
 					}
 					if (GUILayout.Button("Play")) {
 .
