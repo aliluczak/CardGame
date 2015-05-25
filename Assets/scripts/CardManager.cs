@@ -3,7 +3,8 @@ using System.Collections;
 
 public class CardManager : MonoBehaviour {
 
-    public enum CardType { HERO, BOOSTER, SKILL };
+	//public string name;
+	public enum CardType { HERO, BOOSTER, SKILL };
     public CardType cardType;
 	public enum CardSubType {MAGE, TANK, WARRIOR, COMMON};
 	public CardSubType cardSubType;
@@ -31,9 +32,16 @@ public class CardManager : MonoBehaviour {
         infoCard += "succeeded, attack: " + attack + " , defense " + defense + "\n"; 
     }
 
-    void OnMouseDown()
-    {
-        
-
-    }
+	void OnMouseEnter(){}
+	void OnMouseExit(){}
+    void OnMouseDown(){
+		//Fires off when the mouse is clicked while hovering over the object
+		//Aim: Show card stats
+		//GUI.Label("Card Stats");
+		//GUI.Label ("Card Name:" + name);
+		//GUI.Label ("Card Type: " + cardType);
+		//GUI.Label ("Card SubType: " + cardSubType);
+		//GUI.Label ("Attack: " + attack);
+		//GUI.Label ("Defense: " + defense);
+	}
 }

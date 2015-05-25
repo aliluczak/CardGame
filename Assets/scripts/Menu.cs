@@ -105,6 +105,13 @@ public class Menu : MonoBehaviour {
 					playing = true;
 				}
 
+                if (GUILayout.Button("Choose support"))
+                {
+                    registering = false;
+                    logging = true;
+                    playing = true;
+                }
+
 				if (GUILayout.Button("Play"))
 				{
 					registering = false;
