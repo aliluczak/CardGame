@@ -18,6 +18,9 @@ public class Menu : MonoBehaviour {
 	private bool toggleMage = false;
 	private bool toggleWarrior = true;
 	private bool toggleTank = false;
+	private bool toggleMage1 = true;
+	private bool toggleWarrior1 = false;
+	private bool toggleTank1 = false;
 
     //needed objects
 	private GameObject gameObject;
@@ -159,19 +162,20 @@ public class Menu : MonoBehaviour {
 						toggleMage = GUI.Toggle (new Rect (25, 25, 100, 30), toggleMage, "Mage");
 						toggleTank = GUI.Toggle( new Rect (25, 25, 100, 30), toggleTank, "Tank");
 						toggleWarrior = GUI.Toggle( new Rect (25, 25, 100, 30), toggleWarrior, "Warrior");
-						if (toggleMage == true) {
-							cardManager.cardSubType = "MAGE";
-						}
-						if (toggleTank == true) {
-							cardManager.cardSubType = "TANK";
-						}
-						if (toggleWarrior == true) {
-							cardManager.cardSubType = "TANK";
-						}
-						cardNetworkManager.sendCardRequest("HERO", gameObjectName);
+						if (toggleMage == true) {}
+						if (toggleTank == true) {}
+						if (toggleWarrior == true) {}
 					}
+					if (GUILayout.Button("Choose support")) {
+						toggleMage1 = GUI.Toggle (new Rect (25, 25, 100, 30), toggleMage1, "Support Mage");
+						toggleTank1 = GUI.Toggle( new Rect (25, 25, 100, 30), toggleTank1, "Support Tank");
+						toggleWarrior1 = GUI.Toggle( new Rect (25, 25, 100, 30), toggleWarrior1, "Support Warrior");
+						if (toggleMage1 == true) {}
+						if (toggleTank1 == true) {}
+						if (toggleWarrior1 == true) {}
+				}
 					if (GUILayout.Button("Play")) {
-.
+
 					}
 				}
         }

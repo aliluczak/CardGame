@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CardManager : MonoBehaviour {
 
-    public enum CardType { HERO, SKILL, BOOSTER };
+    public enum CardType { HERO, BOOSTER, SKILL };
     public CardType cardType;
 	public enum CardSubType {MAGE, TANK, WARRIOR, COMMON};
 	public CardSubType cardSubType;
