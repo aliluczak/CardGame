@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 using System.IO;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 
 public class Menu : MonoBehaviour {
     
@@ -15,6 +15,9 @@ public class Menu : MonoBehaviour {
     private string passwordConfirmation;
     
     private bool registering, logging, playing = false;
+	private bool toggleMage = false;
+	private bool toggleWarrior = true;
+	private bool toggleTank = false;
 
     //needed objects
     private GameObject gameObject;
@@ -149,7 +152,15 @@ public class Menu : MonoBehaviour {
                 }
 
 				if (playing) {
+					GUILayout.Label("Welcome to the Card Game!");
+
 					if (GUILayout.Button("Choose hero")) {
+						toggleMage = GUI.Toggle (new Rect (25, 25, 100, 30), toggleMage, "Mage");
+						toggleTank = GUI.Toggle( new Rect (25, 25, 100, 30), toggleTank, "Tank");
+						toggleWarrior = GUI.Toggle( new Rect (25, 25, 100, 30), toggleWarrior, "Warrior");
+						if (toggleMage == false) {}
+						if (toggleTank == false) {}
+						if (toggleWarrior == false) {}
 						cardNetworkManager.sendCardRequest(cardType, gameObjectName);
 					}
 					if (GUILayout.Button("Play")) {
