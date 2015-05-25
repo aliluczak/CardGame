@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.IO;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour {
     
@@ -13,14 +14,14 @@ public class Menu : MonoBehaviour {
     private string password;
     private string passwordConfirmation;
     
-    private bool registering, logging = false;
+    private bool registering, logging, playing = false;
 
     //needed objects
     private GameObject gameObject;
     private GameObject networkManager;
     private CardNetworkManager cardNetworkManager;
     private CardManager cardManager;
-   
+
     //functions for menu and cardnetwork manager
     
     //return success info
@@ -89,6 +90,20 @@ public class Menu : MonoBehaviour {
                     logging = false;
                     cardNetworkManager.disconnect();
                 }
+
+				if (GUILayout.Button("Choose hero"))
+				{
+					registering = false;
+					logging = true;
+					playing = true;
+				}
+
+				if (GUILayout.Button("Play"))
+				{
+					registering = false;
+					logging = true;
+					playing = true;
+				}
                 
                 if (registering)
                 {
@@ -132,6 +147,15 @@ public class Menu : MonoBehaviour {
                             cardNetworkManager.keepRunningConnection();
                     }
                 }
+
+				if (playing) {
+					if (GUILayout.Button("Choose hero")) {
+						cardNetworkManager.sendCardRequest(cardType, gameObjectName);
+					}
+					if (GUILayout.Button("Play")) {
+.
+					}
+				}
         }
     }
 }
