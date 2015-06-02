@@ -32,16 +32,4 @@ public class CardManager : MonoBehaviour {
         infoCard += "succeeded, attack: " + attack + " , defense " + defense + "\n"; 
     }
 
-	void OnMouseEnter(){}
-	void OnMouseExit(){}
-    void OnMouseDown(){
-		//Fires off when the mouse is clicked while hovering over the object
-		//Aim: Show card stats
-		//GUI.Label("Card Stats");
-		//GUI.Label ("Card Name:" + name);
-		//GUI.Label ("Card Type: " + cardType);
-		//GUI.Label ("Card SubType: " + cardSubType);
-		//GUI.Label ("Attack: " + attack);
-		//GUI.Label ("Defense: " + defense);
-	}
 }
