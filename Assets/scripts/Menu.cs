@@ -15,6 +15,8 @@ public class Menu : MonoBehaviour {
     private string passwordConfirmation;
     
     private bool registering, logging, playing = false;
+
+    //
 	private bool toggleMage = false;
 	private bool toggleWarrior = true;
 	private bool toggleTank = false;
@@ -54,7 +56,27 @@ public class Menu : MonoBehaviour {
         connectionPort = networkManager.GetComponent<CardNetworkManager>().connectionPort;
     }
 
-    //interface
+    void showOptions()
+    {
+        Application.LoadLevel("Options");
+    }
+
+    public void register()
+    {
+
+    }
+
+    public void login()
+    {
+
+    }
+
+    public void cancel() 
+    {
+
+    }
+
+    //TODO split to functions (needed for UI buttons
     void OnGUI (){
               
         GUILayout.Box(info);
