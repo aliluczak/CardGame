@@ -10,7 +10,6 @@ public class ControllManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 	
 	void OnMouseEnter(){}
@@ -19,10 +18,10 @@ public class ControllManager : MonoBehaviour {
 		//Fires off when the mouse is clicked while hovering over the object
 		//Aim: Show card stats
 		//GUI.Label("Card Stats");
-		//GUI.Label ("Card Name:" + name);
-		//GUI.Label ("Card Type: " + cardType);
-		//GUI.Label ("Card SubType: " + cardSubType);
-		//GUI.Label ("Attack: " + attack);
-		//GUI.Label ("Defense: " + defense);
+		//GUI.Label ("Card Name:" + Card.name);
+		//GUI.Label ("Card Type: " + Card.CardType);
+		//GUI.Label ("Card SubType: " + Card.CardSubType);
+		//GUI.Label ("Attack: " + Card.attack);
+		//GUI.Label ("Defense: " + Card.defense);
 	}
 }
