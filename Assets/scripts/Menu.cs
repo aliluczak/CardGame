@@ -13,8 +13,11 @@ public class Menu : MonoBehaviour {
     private string username;
     private string password;
     private string passwordConfirmation;
+	private string serverip;
+	private string serverport;
     
     private bool registering, logging, playing = false;
+	private bool options = false;
 
     //
 	private bool toggleMage = false;
@@ -202,10 +205,19 @@ public class Menu : MonoBehaviour {
 						if (toggleMage1 == true) {}
 						if (toggleTank1 == true) {}
 						if (toggleWarrior1 == true) {}
-				}
+					}
 					if (GUILayout.Button("Play")) {
 
 					}
+				}
+
+				if (options)
+				{
+					showOptions();
+					GUILayout.Label("IP Serwera:");
+					serverip = GUILayout.TextField(serverip);
+					GUILayout.Label("Port Serwera");
+					serverport = GUILayout.TextField(serverport);
 				}
         }
     }
