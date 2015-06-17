@@ -25,8 +25,31 @@ public class CardNetworkManager : MonoBehaviour
         //loading Menu
         menuObject = GameObject.Find("Menu");
         menu = menuObject.GetComponent<Menu>();
+
+        DontDestroyOnLoad(this);
     }
 
+    //get and set for connection IP
+    public void setConnectionIP(string IP)
+    {
+        connectionIP = IP;
+    }
+
+    public string getConnectionIP()
+    {
+        return connectionIP;
+    }
+
+    //get and set fo connection port
+    public void setConnectionPort(int port)
+    {
+        connectionPort = port;
+    }
+
+    public int getConnectionPort()
+    {
+        return connectionPort;
+    }
 
     //send card request to server
     internal void sendCardRequest(string cardType, string gameObjectName)

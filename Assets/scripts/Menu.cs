@@ -2,6 +2,8 @@
 using System.Collections;
 using System;
 using System.IO;
+using UnityEngine.UI;
+
 //using UnityEngine.UI;
 
 public class Menu : MonoBehaviour {
@@ -29,6 +31,12 @@ public class Menu : MonoBehaviour {
     private GameObject networkManager;
     private CardNetworkManager cardNetworkManager;
     private CardManager cardManager;
+    private GameObject serverPort;
+    private InputField serverPortText;
+    private GameObject serverIP;
+    private InputField serverIPText;
+    private GameObject errorTextField;
+    private Text errorText;
 	//private Card card;
 
     //functions for menu and cardnetwork manager
@@ -54,26 +62,98 @@ public class Menu : MonoBehaviour {
         cardNetworkManager = networkManager.GetComponent<CardNetworkManager>();
         connectionIP = networkManager.GetComponent<CardNetworkManager>().connectionIP;
         connectionPort = networkManager.GetComponent<CardNetworkManager>().connectionPort;
+
     }
 
-    void showOptions()
+
+    // functions for menu
+    //save changes in Option Menu
+    public void saveChanges()
+    {
+        cardNetworkManager.setConnectionIP(serverIPText.text);
+        cardNetworkManager.setConnectionPort(int.Parse(serverPortText.text));
+    }
+
+    //loads options from main menu
+    public void showOptions()
     {
         Application.LoadLevel("Options");
     }
 
+    //loads regiser and login scene
+    public void playButton()
+    {
+        Application.LoadLevel("RegisterLogin");
+    }
+
+    //loads registering
     public void register()
     {
+        Application.LoadLevel("Register");
+    }
+
+
+    //TODO Ola function opening Mobile Keyboard and set username string value
+    public void typeNickname()
+    {
+        
+    }
+
+    //TODO Ola function opening Mobile Keyboard and setting password string value
+    public void typePassword()
+    {
 
     }
 
+    //TODO Ola function opening Mobile Keyboard
+    
+    public void typePassword()
+    {
+
+    }
+
+    //returns password error info
+    public void showPasswordError()
+    {
+        errorTextField = GameObject.Find("ErrorText");
+        errorText = errorTextField.GetComponent<Text>();
+        errorText.text = "Hasła się różnią";
+    }
+
+
+    //loads loging in
     public void login()
     {
-
+        
     }
 
+    //return from options menu to main menu
+    public void backButton()
+    {
+        Application.LoadLevel("Menu");
+    }
+
+    //cancel changes in options menu
     public void cancel() 
     {
+        serverPortText.text = cardNetworkManager.getConnectionPort().ToString();
+        serverIPText.text = cardNetworkManager.getConnectionIP();
+  
+    }
 
+    //managing loadinng scenes
+    void OnLeveLWasLoaded(int level)
+    {
+        if (level == 2)
+        {
+            serverPort = GameObject.Find("serverPort");
+            serverPortText = serverPort.GetComponent<InputField>();
+            serverPortText.text = connectionPort.ToString();
+
+            serverIP = GameObject.Find("serverIP");
+            serverIPText = serverIP.GetComponent<InputField>();
+            serverIPText.text = connectionIP;
+        }
     }
 
     //TODO split to functions (needed for UI buttons
