@@ -31,12 +31,12 @@ public class Menu : MonoBehaviour {
     private GameObject networkManager;
     private CardNetworkManager cardNetworkManager;
     private CardManager cardManager;
-    private GameObject serverPort;
-    private InputField serverPortText;
-    private GameObject serverIP;
-    private InputField serverIPText;
-    private GameObject errorTextField;
+    private Text serverPortText;
+    private Text serverIPText;
     private Text errorText;
+    private Text nicknameText;
+    private Text passwordText;
+    private Text confirmationpasswordText;
 	//private Card card;
 
     //functions for menu and cardnetwork manager
@@ -92,22 +92,31 @@ public class Menu : MonoBehaviour {
         Application.LoadLevel("Register");
     }
 
-
-    //TODO Ola function opening Mobile Keyboard and set username string value
+    // TODO OLA all the functions below perhaps need a variable of keyboard to be added above
+    //could try to set corresponded variables in these functions, otherwise create 3 new public void functions, 
+    //that set these values; in that case keyboard variable needed
+ 
     public void typeNickname()
     {
         
     }
 
-    //TODO Ola function opening Mobile Keyboard and setting password string value
     public void typePassword()
     {
 
     }
 
-    //TODO Ola function opening Mobile Keyboard
-    
-    public void typePassword()
+    public void typeConfirmationPassword()
+    {
+
+    }
+
+    public void typeIP()
+    {
+
+    }
+
+    public void typeConnectionPort()
     {
 
     }
@@ -115,8 +124,7 @@ public class Menu : MonoBehaviour {
     //returns password error info
     public void showPasswordError()
     {
-        errorTextField = GameObject.Find("ErrorText");
-        errorText = errorTextField.GetComponent<Text>();
+        errorText = GameObject.Find("ErrorText").GetComponent<Text>();
         errorText.text = "Hasła się różnią";
     }
 
@@ -142,22 +150,49 @@ public class Menu : MonoBehaviour {
     }
 
     //managing loadinng scenes
-    void OnLeveLWasLoaded(int level)
+    void OnLevelWasLoaded(int level)
     {
         if (level == 2)
         {
-            serverPort = GameObject.Find("serverPort");
-            serverPortText = serverPort.GetComponent<InputField>();
+            serverPortText = GameObject.Find("serverPortText").GetComponent<Text>();
             serverPortText.text = connectionPort.ToString();
 
-            serverIP = GameObject.Find("serverIP");
-            serverIPText = serverIP.GetComponent<InputField>();
+            serverIPText = GameObject.Find("serverIPText").GetComponent<Text>();
             serverIPText.text = connectionIP;
+        }
+
+        if (level == 4)
+        {
+             nicknameText = GameObject.Find("NickNameText").GetComponent<Text>();
+             passwordText= GameObject.Find("PasswordText").GetComponent<Text>();
+             confirmationpasswordText = GameObject.Find("RepeatPasswordText").GetComponent<Text>();
+        }
+        //TODO request to server several random warrior cards and display their images, player picks chosen cards
+        //cards can be saved in new variables (index for ex.)
+        if (level == 5)
+        {
+
         }
     }
 
+    public void registrationStepTwo()
+    {
+        if (String.IsNullOrEmpty(nicknameText.text) || String.IsNullOrEmpty(passwordText.text) || String.IsNullOrEmpty(confirmationpasswordText.text))
+        {
+            errorText.text = "Nie wszystkie pola zostały wypełnione";
+        }
+        else
+        {
+            if (!confirmationpasswordText.text.Equals(passwordText.text))
+                showPasswordError();
+            else
+                Application.LoadLevel("CardRegisteration");
+        } 
+    }
+
+
     //TODO split to functions (needed for UI buttons
-    void OnGUI (){
+  /*  void OnGUI (){
               
         GUILayout.Box(info);
               
@@ -288,5 +323,6 @@ public class Menu : MonoBehaviour {
 					}
 				}
         }
-    }
+    
+    }*/
 }
