@@ -25,4 +25,15 @@ public class ControllManager : MonoBehaviour {
 		//GUI.Label ("Attack: " + attack);
 		//GUI.Label ("Defense: " + defense);
 	}
+
+    void dragObject()
+    {
+
+    }
+
+    //
+    void holdButtonDown()
+    {
+
+    }
 }
