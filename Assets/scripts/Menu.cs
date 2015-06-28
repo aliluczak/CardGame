@@ -2,6 +2,8 @@
 using System.Collections;
 using System;
 using System.IO;
+using UnityEngine.UI;
+
 //using UnityEngine.UI;
 
 public class Menu : MonoBehaviour {
@@ -32,6 +34,12 @@ public class Menu : MonoBehaviour {
     private GameObject networkManager;
     private CardNetworkManager cardNetworkManager;
     private CardManager cardManager;
+    private Text serverPortText;
+    private Text serverIPText;
+    private Text errorText;
+    private Text nicknameText;
+    private Text passwordText;
+    private Text confirmationpasswordText;
 	//private Card card;
 
     //functions for menu and cardnetwork manager
@@ -57,30 +65,137 @@ public class Menu : MonoBehaviour {
         cardNetworkManager = networkManager.GetComponent<CardNetworkManager>();
         connectionIP = networkManager.GetComponent<CardNetworkManager>().connectionIP;
         connectionPort = networkManager.GetComponent<CardNetworkManager>().connectionPort;
+
     }
 
-    void showOptions()
+
+    // functions for menu
+    //save changes in Option Menu
+    public void saveChanges()
+    {
+        cardNetworkManager.setConnectionIP(serverIPText.text);
+        cardNetworkManager.setConnectionPort(int.Parse(serverPortText.text));
+    }
+
+    //loads options from main menu
+    public void showOptions()
     {
         Application.LoadLevel("Options");
     }
 
+    //loads regiser and login scene
+    public void playButton()
+    {
+        Application.LoadLevel("RegisterLogin");
+    }
+
+    //loads registering
     public void register()
     {
+        Application.LoadLevel("Register");
+    }
+
+    // TODO OLA all the functions below perhaps need a variable of keyboard to be added above
+    //could try to set corresponded variables in these functions, otherwise create 3 new public void functions, 
+    //that set these values; in that case keyboard variable needed
+ 
+    public void typeNickname()
+    {
+        
+    }
+
+    public void typePassword()
+    {
 
     }
 
+    public void typeConfirmationPassword()
+    {
+
+    }
+
+    public void typeIP()
+    {
+
+    }
+
+    public void typeConnectionPort()
+    {
+
+    }
+
+    //returns password error info
+    public void showPasswordError()
+    {
+        errorText = GameObject.Find("ErrorText").GetComponent<Text>();
+        errorText.text = "Hasła się różnią";
+    }
+
+
+    //loads loging in
     public void login()
     {
-
+        
     }
 
+    //return from options menu to main menu
+    public void backButton()
+    {
+        Application.LoadLevel("Menu");
+    }
+
+    //cancel changes in options menu
     public void cancel() 
     {
-
+        serverPortText.text = cardNetworkManager.getConnectionPort().ToString();
+        serverIPText.text = cardNetworkManager.getConnectionIP();
+  
     }
 
+    //managing loadinng scenes
+    void OnLevelWasLoaded(int level)
+    {
+        if (level == 2)
+        {
+            serverPortText = GameObject.Find("serverPortText").GetComponent<Text>();
+            serverPortText.text = connectionPort.ToString();
+
+            serverIPText = GameObject.Find("serverIPText").GetComponent<Text>();
+            serverIPText.text = connectionIP;
+        }
+
+        if (level == 4)
+        {
+             nicknameText = GameObject.Find("NickNameText").GetComponent<Text>();
+             passwordText= GameObject.Find("PasswordText").GetComponent<Text>();
+             confirmationpasswordText = GameObject.Find("RepeatPasswordText").GetComponent<Text>();
+        }
+        //TODO request to server several random warrior cards and display their images, player picks chosen cards
+        //cards can be saved in new variables (index for ex.)
+        if (level == 5)
+        {
+
+        }
+    }
+
+    public void registrationStepTwo()
+    {
+        if (String.IsNullOrEmpty(nicknameText.text) || String.IsNullOrEmpty(passwordText.text) || String.IsNullOrEmpty(confirmationpasswordText.text))
+        {
+            errorText.text = "Nie wszystkie pola zostały wypełnione";
+        }
+        else
+        {
+            if (!confirmationpasswordText.text.Equals(passwordText.text))
+                showPasswordError();
+            else
+                Application.LoadLevel("CardRegisteration");
+        } 
+    }
+
+
     //TODO split to functions (needed for UI buttons
-    void OnGUI (){
+  /*  void OnGUI (){
               
         GUILayout.Box(info);
               
@@ -220,5 +335,6 @@ public class Menu : MonoBehaviour {
 					serverport = GUILayout.TextField(serverport);
 				}
         }
-    }
+    
+    }*/
 }

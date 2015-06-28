@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CardManager : MonoBehaviour {
 
@@ -10,8 +12,7 @@ public class CardManager : MonoBehaviour {
 	public CardSubType cardSubType;
     public int attack;
     public int defense;
-    public Sprite[] textures;
-    public int cardIndex;
+    public Dictionary<int, Image> charactersList;
     private GameObject gameObject;
     private CardNetworkManager cardNetworkManager;
     private string infoCard ="";
@@ -22,9 +23,14 @@ public class CardManager : MonoBehaviour {
 
         gameObject = GameObject.Find("CardNetworkManager");
         cardNetworkManager = gameObject.GetComponent<CardNetworkManager>();
-    }
-        
 
+        fillCharactersList();
+    }
+
+    private void fillCharactersList()
+    {
+
+    }
     public void addCard(int obtainedAttack, int obtainedDefense)
     {
         attack = obtainedAttack;
