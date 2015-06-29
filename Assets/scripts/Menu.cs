@@ -4,8 +4,6 @@ using System;
 using System.IO;
 using UnityEngine.UI;
 
-//using UnityEngine.UI;
-
 public class Menu : MonoBehaviour {
     
     //variables needed for connection
