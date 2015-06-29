@@ -152,7 +152,7 @@ public class Menu : MonoBehaviour {
   
     }
 
-    //managing loadinng scenes
+    //managing loading scenes
     void OnLevelWasLoaded(int level)
     {
         if (level == 2)

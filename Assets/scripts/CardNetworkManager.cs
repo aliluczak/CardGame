@@ -40,7 +40,7 @@ public class CardNetworkManager : MonoBehaviour
         return connectionIP;
     }
 
-    //get and set fo connection port
+    //get and set for connection port
     public void setConnectionPort(int port)
     {
         connectionPort = port;
