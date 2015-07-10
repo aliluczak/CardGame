@@ -51,8 +51,8 @@
      <Compile Include="Assets\scripts\CardNetworkManager.cs" />
      <Compile Include="Assets\scripts\ControllManager.cs" />
      <Compile Include="Assets\scripts\Deck.cs" />
+     <Compile Include="Assets\scripts\DoubleClick.cs" />
      <Compile Include="Assets\scripts\Keyboard.cs" />
-     <Compile Include="Assets\scripts\KeyboardTest.cs" />
      <Compile Include="Assets\scripts\Menu.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

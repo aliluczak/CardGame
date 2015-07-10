@@ -3,9 +3,6 @@ using System.Collections;
 
 public class ControllManager : MonoBehaviour {
 
-	private string information;
-	private bool guiOn = false;
-
 	// Use this for initialization
 	void Start () {
 	
@@ -13,19 +10,12 @@ public class ControllManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-	
-	void OnMouseEnter(){}
-	void OnMouseExit(){}
-
-	void OnMouseDown(){
-		//Fires off when the mouse is clicked while hovering over the object
-		//Aim: Show card stats
-
-		guiOn = true; // enable gui and define position at point clicked
-
-		guiOn = false;
+		//Returns true during the frame the user pressed down the virtual button identified by buttonName.
+		//if (Input.GetButtonDown()) {
+		//}
+		//Returns true while the virtual button identified by buttonName is held down.
+		//if (Input.GetButton()) {
+		//}
 	}
 
     void dragObject()
@@ -38,4 +28,8 @@ public class ControllManager : MonoBehaviour {
     {
 
     }
+
+	void OnMouseEnter(){}
+	void OnMouseExit(){}
+	void OnMouseDown(){}
 }
