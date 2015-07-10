@@ -16,16 +16,16 @@ public class Menu : MonoBehaviour {
 	private string serverip;
 	private string serverport;
     
-    private bool registering, logging, playing = false;
-	private bool options = false;
+	private bool registering = false; 
+	//private logging, playing = false;
+	//private bool options = false;
 
-    //
-	private bool toggleMage = false;
-	private bool toggleWarrior = true;
-	private bool toggleTank = false;
-	private bool toggleMage1 = true;
-	private bool toggleWarrior1 = false;
-	private bool toggleTank1 = false;
+	//private bool toggleMage = false;
+	//private bool toggleWarrior = true;
+	//private bool toggleTank = false;
+	//private bool toggleMage1 = true;
+	//private bool toggleWarrior1 = false;
+	//private bool toggleTank1 = false;
 
     //needed objects
 	private GameObject gameObject;
