@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 internal class Card : MonoBehaviour
 {
@@ -13,9 +12,4 @@ internal class Card : MonoBehaviour
 	internal enum CardSubType {MAGE, TANK, WARRIOR, COMMON};
     internal List<int> attack;
     internal List<int> defense;
-
-    void Start()
-    {
-
-    }
 }

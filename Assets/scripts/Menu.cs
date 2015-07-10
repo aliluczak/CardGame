@@ -4,20 +4,19 @@ using System;
 using System.IO;
 using UnityEngine.UI;
 
+//using UnityEngine.UI;
+
 public class Menu : MonoBehaviour {
     
     //variables needed for connection
+    public static bool notCreated = true;
+
     private string info, connectionIP;
     private int connectionPort;
     
     private string username;
     private string password;
     private string passwordConfirmation;
-	private string serverip;
-	private string serverport;
-    
-    private bool registering, logging, playing = false;
-	private bool options = false;
 
     //
 	private bool toggleMage = false;
@@ -48,17 +47,22 @@ public class Menu : MonoBehaviour {
         info += addedInfo;
     }
 
-    //signal of end of registration
-    internal void endOfRegisteration()
-    {
-        registering = false;
-    }
-
     // functions for menu management
 
     //loads all the gameobject and needed variables
     void Awake()
     {
+        if (notCreated)
+        {   
+            DontDestroyOnLoad(this);
+            notCreated = false;
+
+        }
+        else
+        {
+            DestroyImmediate(this.gameObject);
+        }
+
         networkManager = GameObject.Find("NetworkManager");
         cardNetworkManager = networkManager.GetComponent<CardNetworkManager>();
         connectionIP = networkManager.GetComponent<CardNetworkManager>().connectionIP;
@@ -71,8 +75,8 @@ public class Menu : MonoBehaviour {
     //save changes in Option Menu
     public void saveChanges()
     {
-        cardNetworkManager.setConnectionIP(serverIPText.text);
-        cardNetworkManager.setConnectionPort(int.Parse(serverPortText.text));
+        PlayerPrefs.SetString("IP", serverIPText.text);
+        PlayerPrefs.SetInt("Port", int.Parse(serverPortText.text));
     }
 
     //loads options from main menu
@@ -131,9 +135,9 @@ public class Menu : MonoBehaviour {
 
 
     //loads loging in
-    public void login()
+    public void login(string username, string password)
     {
-        
+        cardNetworkManager.loginUser(username, password);
     }
 
     //return from options menu to main menu
@@ -145,21 +149,20 @@ public class Menu : MonoBehaviour {
     //cancel changes in options menu
     public void cancel() 
     {
-        serverPortText.text = cardNetworkManager.getConnectionPort().ToString();
-        serverIPText.text = cardNetworkManager.getConnectionIP();
-  
+        serverPortText.text = PlayerPrefs.GetInt("Port").ToString();
+        serverIPText.text = PlayerPrefs.GetString("IP");
     }
 
-    //managing loading scenes
+    //managing loadinng scenes
     void OnLevelWasLoaded(int level)
     {
         if (level == 2)
         {
             serverPortText = GameObject.Find("serverPortText").GetComponent<Text>();
-            serverPortText.text = connectionPort.ToString();
+            serverPortText.text = PlayerPrefs.GetInt("Port").ToString();
 
             serverIPText = GameObject.Find("serverIPText").GetComponent<Text>();
-            serverIPText.text = connectionIP;
+            serverIPText.text = PlayerPrefs.GetString("IP");
         }
 
         if (level == 4)
@@ -189,6 +192,12 @@ public class Menu : MonoBehaviour {
             else
                 Application.LoadLevel("CardRegisteration");
         } 
+    }
+
+    public void finishRegistration()
+    {
+        cardNetworkManager.connectToSerwer(PlayerPrefs.GetString("IP"), PlayerPrefs.GetInt("Port"));
+        cardNetworkManager.registerUser(username, password);
     }
 
 
@@ -318,19 +327,10 @@ public class Menu : MonoBehaviour {
 						if (toggleMage1 == true) {}
 						if (toggleTank1 == true) {}
 						if (toggleWarrior1 == true) {}
-					}
+				}
 					if (GUILayout.Button("Play")) {
 
 					}
-				}
-
-				if (options)
-				{
-					showOptions();
-					GUILayout.Label("IP Serwera:");
-					serverip = GUILayout.TextField(serverip);
-					GUILayout.Label("Port Serwera");
-					serverport = GUILayout.TextField(serverport);
 				}
         }
     
