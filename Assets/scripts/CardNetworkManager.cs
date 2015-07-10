@@ -4,6 +4,7 @@ using System;
 
 public class CardNetworkManager : MonoBehaviour
 {
+    private static CardNetworkManager instance;
     //connection variables
     internal string connectionIP = "127.0.0.1";
     internal int connectionPort = 8000;
@@ -15,18 +16,28 @@ public class CardNetworkManager : MonoBehaviour
     private GameObject menuObject;
     private CardManager cardManager;
     private Menu menu;
+   
 
     //load all the needed objects and classes
     void Awake()
     {
+        if (!instance)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+            Destroy(this.gameObject);
+
         //loading NetworkView
         cardNetworkView = GetComponent<NetworkView>();
 
         //loading Menu
         menuObject = GameObject.Find("Menu");
         menu = menuObject.GetComponent<Menu>();
+        card = GameObject.Find("CardManager");
+        cardManager = card.GetComponent<CardManager>();
 
-        DontDestroyOnLoad(this);
     }
 
     //get and set for connection IP
@@ -40,7 +51,7 @@ public class CardNetworkManager : MonoBehaviour
         return connectionIP;
     }
 
-    //get and set for connection port
+    //get and set fo connection port
     public void setConnectionPort(int port)
     {
         connectionPort = port;
@@ -76,6 +87,11 @@ public class CardNetworkManager : MonoBehaviour
         }
     }
 
+    internal void moveCard(int from, int to)
+    {
+        cardNetworkView.RPC("moveCard", RPCMode.Server, from, to);
+    }
+
     // disconnecting form server
     internal void disconnect()
     {
@@ -92,15 +108,6 @@ public class CardNetworkManager : MonoBehaviour
     internal void loginUser(string username, string password)
     {
         cardNetworkView.RPC("Login", RPCMode.Server, username, password);
-    }
-
-    //keep the connection through the game
-    internal void keepRunningConnection()
-    {
-        Network.isMessageQueueRunning = false;
-        DontDestroyOnLoad(this);
-        Application.LoadLevel("MainApp");
-        Network.isMessageQueueRunning = true;
     }
 
     void OnConnectedToServer()
@@ -123,6 +130,10 @@ public class CardNetworkManager : MonoBehaviour
     [RPC]
     void cardRequest(string cardType, string gameObjectName) { }
 
+    [RPC]
+    void moveCard() { }
+    
+
 
     // RPCs received from server
 
@@ -131,8 +142,7 @@ public class CardNetworkManager : MonoBehaviour
     [RPC]
     void userRegistered()
     {
-        menu.addInfo("User succesfully registered\n");
-        menu.endOfRegisteration();
+        Application.LoadLevel(3);
     }
 
     [RPC]
@@ -156,7 +166,8 @@ public class CardNetworkManager : MonoBehaviour
     [RPC]
     void loginSuccess()
     {
-        menu.addInfo("Log in succesfull\n");
+        Application.LoadLevel(1);
+
     }
 
     // gameplay RPCs
@@ -172,6 +183,18 @@ public class CardNetworkManager : MonoBehaviour
         card = GameObject.Find(gameObjectName);
         cardManager = card.GetComponent<CardManager>();
         cardManager.addCard(attack, defense);
+    }
+
+    [RPC]
+    void cardMoved(int from, int to)
+    {
+        cardManager.moveCard(from, to);
+    }
+
+    [RPC]
+    void cardCannotBeMoved()
+    {
+
     }
 }
 
