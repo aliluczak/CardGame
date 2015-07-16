@@ -15,6 +15,12 @@ public class Menu : MonoBehaviour {
     private string username;
     private string password;
     private string passwordConfirmation;
+	//keyboard
+	private string passw;
+	private string passConfirmation;
+	private string serverPort;
+	private string serverIP;
+	private string nickname;
 
     //variables for buttons
 /*	private bool toggleMage = false;
@@ -101,27 +107,27 @@ public class Menu : MonoBehaviour {
  
     public void typeNickname()
     {
-		Keyboard nick = new Keyboard();
+		Keyboard nick = new Keyboard(nickname);
 	}
 
     public void typePassword()
     {
-		Keyboard pass = new Keyboard ();
+		Keyboard pass = new Keyboard (passw);
     }
 
     public void typeConfirmationPassword()
     {
-		Keyboard conf = new Keyboard ();
+		Keyboard conf = new Keyboard (passConfirmation);
     }
 
     public void typeIP()
     {
-		Keyboard ip = new Keyboard ();
+		Keyboard ip = new Keyboard (serverIP);
     }
 
     public void typeConnectionPort()
     {
-		Keyboard port = new Keyboard ();
+		Keyboard port = new Keyboard (serverPort);
     }
 
     //returns password error info

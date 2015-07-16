@@ -4,18 +4,21 @@ using System.IO;
 using UnityEngine.UI;
 
 public class Keyboard : MonoBehaviour {
-	//different keyboards
-	private TouchScreenKeyboard keyboard;
-	//TouchScreenKeyboard nameKeyboard;
-	//TouchScreenKeyboard emailKeyboard;
-	//TouchScreenKeyboard numberKeyboard;
-
 	//input variables
-	private string input = "";
+	public string input = "";
 	//private string nameText = "";
 	//private string emailText = "";
 	//private string numberText = "";
 	private Text errorText;
+
+	//different keyboards
+	public Keyboard(string input) {
+
+	}
+	private TouchScreenKeyboard keyboard;
+	//TouchScreenKeyboard nameKeyboard;
+	//TouchScreenKeyboard emailKeyboard;
+	//TouchScreenKeyboard numberKeyboard;
 
 	// Use this for initialization
 	void Start () {
