@@ -14,8 +14,6 @@ public class ControllManager : MonoBehaviour {
 	
 	}
 
-	void dragObject(){}
-
 	void OnMouseEnter(){}
 	void OnMouseExit(){}
 	void OnMouseDown(){}
