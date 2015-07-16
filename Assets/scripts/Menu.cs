@@ -16,14 +16,14 @@ public class Menu : MonoBehaviour {
     private string password;
     private string passwordConfirmation;
 
-    //
-	private bool toggleMage = false;
+    //variables for buttons
+/*	private bool toggleMage = false;
 	private bool toggleWarrior = true;
 	private bool toggleTank = false;
 	private bool toggleMage1 = true;
 	private bool toggleWarrior1 = false;
 	private bool toggleTank1 = false;
-
+*/
     //needed objects
 	private GameObject gameObject;
     private GameObject networkManager;
@@ -36,8 +36,8 @@ public class Menu : MonoBehaviour {
     private Text passwordText;
     private Text confirmationpasswordText;
 	//private Card card;
-
-    //functions for menu and cardnetwork manager
+	
+	//functions for menu and cardnetwork manager
     
     //return success info
     internal void addInfo(string addedInfo)
@@ -101,27 +101,27 @@ public class Menu : MonoBehaviour {
  
     public void typeNickname()
     {
-        
-    }
+		Keyboard nick = new Keyboard();
+	}
 
     public void typePassword()
     {
-
+		Keyboard pass = new Keyboard ();
     }
 
     public void typeConfirmationPassword()
     {
-
+		Keyboard conf = new Keyboard ();
     }
 
     public void typeIP()
     {
-
+		Keyboard ip = new Keyboard ();
     }
 
     public void typeConnectionPort()
     {
-
+		Keyboard port = new Keyboard ();
     }
 
     //returns password error info
@@ -132,7 +132,7 @@ public class Menu : MonoBehaviour {
     }
 
 
-    //loads loging in
+    //loads logging in
     public void login(string username, string password)
     {
         cardNetworkManager.loginUser(username, password);
@@ -151,7 +151,7 @@ public class Menu : MonoBehaviour {
         serverIPText.text = PlayerPrefs.GetString("IP");
     }
 
-    //managing loadinng scenes
+    //managing loading scenes
     void OnLevelWasLoaded(int level)
     {
         if (level == 2)
