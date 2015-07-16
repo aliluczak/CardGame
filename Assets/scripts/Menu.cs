@@ -107,27 +107,27 @@ public class Menu : MonoBehaviour {
  
     public void typeNickname()
     {
-		Keyboard nick = new Keyboard(nickname);
+//		Keyboard nick = new Keyboard(nickname);
 	}
 
     public void typePassword()
     {
-		Keyboard pass = new Keyboard (passw);
+//		Keyboard pass = new Keyboard (passw);
     }
 
     public void typeConfirmationPassword()
     {
-		Keyboard conf = new Keyboard (passConfirmation);
+//		Keyboard conf = new Keyboard (passConfirmation);
     }
 
     public void typeIP()
     {
-		Keyboard ip = new Keyboard (serverIP);
+//		Keyboard ip = new Keyboard (serverIP);
     }
 
     public void typeConnectionPort()
     {
-		Keyboard port = new Keyboard (serverPort);
+//		Keyboard port = new Keyboard (serverPort);
     }
 
     //returns password error info

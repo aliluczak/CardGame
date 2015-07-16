@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ControllManager : MonoBehaviour {
 
@@ -10,26 +11,13 @@ public class ControllManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Returns true during the frame the user pressed down the virtual button identified by buttonName.
-		//if (Input.GetButtonDown()) {
-		//}
-		//Returns true while the virtual button identified by buttonName is held down.
-		//if (Input.GetButton()) {
-		//}
+	
 	}
 
-    void dragObject()
-    {
-
-    }
-
-    //
-    void holdButtonDown()
-    {
-
-    }
+	void dragObject(){}
 
 	void OnMouseEnter(){}
 	void OnMouseExit(){}
 	void OnMouseDown(){}
+
 }
