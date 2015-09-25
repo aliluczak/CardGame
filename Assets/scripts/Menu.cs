@@ -15,12 +15,26 @@ public class Menu : MonoBehaviour {
     private string username;
     private string password;
     private string passwordConfirmation;
+    
+    internal bool playerNotConnected;
+    internal bool userNotRegistered;
+    internal bool userNameNotExists;
+    internal bool userLoggedIn;
+    internal bool wrongPassword;
+
+    private bool registrationKeyPressed;
+    private bool logButtonPressed;
+    private bool registrationRequestSent;
+    private bool logRequestSent;
+    
 	//keyboard
 	private string passw;
 	private string passConfirmation;
 	private string serverPort;
 	private string serverIP;
 	private string nickname;
+
+    
 
     //variables for buttons
 /*	private bool toggleMage = false;
@@ -45,11 +59,7 @@ public class Menu : MonoBehaviour {
 	
 	//functions for menu and cardnetwork manager
     
-    //return success info
-    internal void addInfo(string addedInfo)
-    {
-        info += addedInfo;
-    }
+    //return success inf
 
     // functions for menu management
 
@@ -71,6 +81,16 @@ public class Menu : MonoBehaviour {
         cardNetworkManager = networkManager.GetComponent<CardNetworkManager>();
         connectionIP = networkManager.GetComponent<CardNetworkManager>().connectionIP;
         connectionPort = networkManager.GetComponent<CardNetworkManager>().connectionPort;
+
+     
+        playerNotConnected = true;
+        userNotRegistered = true;
+        userNameNotExists = true;
+        wrongPassword = false;
+        userLoggedIn = false;
+
+        registrationKeyPressed = false;
+        logButtonPressed = false;
 
     }
 
@@ -99,6 +119,11 @@ public class Menu : MonoBehaviour {
     public void register()
     {
         Application.LoadLevel("Register");
+    }
+
+    public void login()
+    {
+        Application.LoadLevel("Login");
     }
 
     // TODO OLA all the functions below perhaps need a variable of keyboard to be added above
@@ -139,9 +164,50 @@ public class Menu : MonoBehaviour {
 
 
     //loads logging in
-    public void login(string username, string password)
+    public void finishLogging(string username, string password)
     {
-        cardNetworkManager.loginUser(username, password);
+        userNameNotExists = false;
+        if (!logButtonPressed)
+        {
+            setLogButtonPressed();
+            cardNetworkManager.connectToSerwer(PlayerPrefs.GetString("IP"), PlayerPrefs.GetInt("Port"));
+            StartCoroutine(LogUser(username, password));
+        }
+    }
+
+    IEnumerator LogUser(string username, string password)
+    {
+        while (playerNotConnected)
+        {
+            yield return null;
+        }
+
+        if (!logRequestSent)
+        {
+            setLogRequestSent();
+            cardNetworkManager.loginUser(username, password);
+        }
+
+        while (!userLoggedIn && !userNameNotExists && !wrongPassword)
+        {
+            yield return null;
+        }
+
+        if (userLoggedIn)
+        {
+            userLoggedIn = false;
+            Application.LoadLevel(1);
+        }
+        else if (userNameNotExists)
+        {
+            userNameNotExists = false;
+            Debug.Log("Username not exists");
+        }
+        else
+        {
+            wrongPassword = false;
+            Debug.Log("Wrong password");
+        }
     }
 
     //return from options menu to main menu
@@ -194,17 +260,102 @@ public class Menu : MonoBehaviour {
             if (!confirmationpasswordText.text.Equals(passwordText.text))
                 showPasswordError();
             else
+                username = nicknameText.text;
+                password = passwordText.text;
                 Application.LoadLevel("CardRegisteration");
         } 
     }
 
     public void finishRegistration()
     {
-        cardNetworkManager.connectToSerwer(PlayerPrefs.GetString("IP"), PlayerPrefs.GetInt("Port"));
-        cardNetworkManager.registerUser(username, password);
+        if (!registrationKeyPressed)
+        {
+            cardNetworkManager.connectToSerwer(PlayerPrefs.GetString("IP"), PlayerPrefs.GetInt("Port"));
+            StartCoroutine(registerPlayer(username, password));
+            setRegistrationButtonPressed();
+        }
     }
 
 
+    IEnumerator registerPlayer(string username, string password)
+    {
+        while (playerNotConnected)
+        {
+            yield return null;
+        }
+        Debug.Log("PlayerConnected");
+        cardNetworkManager.registerUser(username, password);
+        StartCoroutine(ifUserRegistered());
+    }
+
+    IEnumerator ifUserRegistered()
+    {
+        while(userNotRegistered && userNameNotExists) {
+            yield return null;
+        }
+
+        if (!userNotRegistered)
+        {
+            Debug.Log("User registered");
+            userNotRegistered = true;
+            Application.LoadLevel(3);
+        }
+        else
+        {
+            Debug.Log("Username exists");
+            userNameNotExists = true;
+        }
+    }
+
+    public void setPlayerConnected()
+    {
+        playerNotConnected = false;
+    }
+
+    public void setPlayerDisconnected()
+    {
+        playerNotConnected = true;
+    }
+
+    private void setRegistrationButtonPressed()
+    {
+        registrationKeyPressed = true;
+    }
+
+    private void setRegistrationButtonInactive() 
+    {
+        registrationKeyPressed = false;
+    }
+
+    private void setRegistrationRequestSent()
+    {
+        registrationRequestSent = true;
+    }
+
+    private void setNoRegistrationRequest()
+    {
+        registrationRequestSent = false;
+    }
+
+    private void setLogRequestSent()
+    {
+        logRequestSent = true;
+    }
+
+    private void setNoLogRequest()
+    {
+        logRequestSent = false;
+    }
+
+    private void setLogButtonPressed()
+    {
+        logButtonPressed = true;
+    }
+
+    private void setLogButtonInactive()
+    {
+        logButtonPressed = false;
+    }
     //TODO split to functions (needed for UI buttons
   /*  void OnGUI (){
               

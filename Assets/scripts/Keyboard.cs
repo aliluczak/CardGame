@@ -84,7 +84,6 @@ public class Keyboard : MonoBehaviour {
 		if (keyboard != null && keyboard.done)
 		{
 			input = keyboard.text;
-			print ("User input is: " + input);
 		}
 /*		//name keyboard
 		if (nameKeyboard != null && nameKeyboard.done)

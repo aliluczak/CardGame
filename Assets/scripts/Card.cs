@@ -5,7 +5,7 @@ using System.Collections.Generic;
 internal class Card : MonoBehaviour
 {
 
-    internal string name;
+    internal string cardName;
 	internal enum CardType { HERO, BOOSTER, SKILL};
 	//mage, tank & warrior concern Hero
 	//common concerns Booster & Skill

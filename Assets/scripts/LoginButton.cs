@@ -18,7 +18,7 @@ public class LoginButton : MonoBehaviour {
         inputs = GameObject.Find("Textpassword");
         password = inputs.GetComponent<Text>();
 
-        login.onClick.AddListener(()=> menu.login(username.text, password.text));
+        login.onClick.AddListener(()=> menu.finishLogging(username.text, password.text));
         cancel.onClick.AddListener(() => menu.backButton());
 	}
 }

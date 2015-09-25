@@ -83,7 +83,7 @@ public class CardNetworkManager : MonoBehaviour
         }
         catch (Exception)
         {
-            menu.addInfo("Server is not running or check IP and port \n");
+            Debug.Log("Check IP and port"); 
         }
     }
 
@@ -112,12 +112,12 @@ public class CardNetworkManager : MonoBehaviour
 
     void OnConnectedToServer()
     {
-        menu.addInfo("Connected to server \n");
+        menu.playerNotConnected = false;
     }
 
     void OnDisonnectedFromServer()
     {
-        menu.addInfo("Disconnected from server");
+        Debug.Log("Disconnected from server");
     }
 
     //RPCs sent to server
@@ -142,39 +142,38 @@ public class CardNetworkManager : MonoBehaviour
     [RPC]
     void userRegistered()
     {
-        Application.LoadLevel(3);
+        menu.userNotRegistered = false;
     }
 
     [RPC]
     void usernameExists()
     {
-        menu.addInfo("Username already exists \n");
+        menu.userNameNotExists = false;
     }
 
     [RPC]
     void userNotFound()
     {
-        menu.addInfo("Wrong username\n");
+        menu.userNameNotExists = true;
     }
 
     [RPC]
     void wrongPassword()
     {
-        menu.addInfo("Wrong password\n");
+        menu.wrongPassword = true;
     }
 
     [RPC]
     void loginSuccess()
     {
-        Application.LoadLevel(1);
-
+        menu.userLoggedIn = true;
     }
 
     // gameplay RPCs
     [RPC]
     void noCard()
     {
-        menu.addInfo("No card selected \n");
+        Debug.Log("No card sellected");
     }
 
     [RPC]
@@ -195,6 +194,12 @@ public class CardNetworkManager : MonoBehaviour
     void cardCannotBeMoved()
     {
 
+    }
+
+    [RPC]
+    void movingPhaseBegins()
+    {
+        cardManager.setMovingPhaseActive();
     }
 }
 

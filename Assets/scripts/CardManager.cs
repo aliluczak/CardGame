@@ -31,6 +31,8 @@ public class CardManager : MonoBehaviour {
 
     private enum CardField { HERO, SUPPORT, RANDOM1, RANDOM2, RANDOM3 };
 
+    private bool movingPhase;
+
 
 	// Use this for initialization
     void Start()
@@ -135,6 +137,11 @@ public class CardManager : MonoBehaviour {
         attack = obtainedAttack;
         defense = obtainedDefense;
         infoCard += "succeeded, attack: " + attack + " , defense " + defense + "\n"; 
+    }
+
+    public void setMovingPhaseActive()
+    {
+        movingPhase = true;
     }
     /*
     public string getFiledInfo(Image field)
