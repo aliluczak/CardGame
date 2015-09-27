@@ -14,8 +14,15 @@ public class CardNetworkManager : MonoBehaviour
     private GameObject card;
     private GameObject cardNetworkViewObject;
     private GameObject menuObject;
+    private GameObject heroRandomCard;
+    private GameObject randomCard1;
+    private GameObject randomCard2;
+    private GameObject heroCard;
+    private GameObject supportCard;
+    private GameObject textInfoObject;
     private CardManager cardManager;
     private Menu menu;
+    private TextController textController;
    
 
     //load all the needed objects and classes
@@ -37,7 +44,8 @@ public class CardNetworkManager : MonoBehaviour
         menu = menuObject.GetComponent<Menu>();
         card = GameObject.Find("CardManager");
         cardManager = card.GetComponent<CardManager>();
-
+        textInfoObject = GameObject.Find("Info");
+        textController = textInfoObject.GetComponent<TextController>();
     }
 
     //get and set for connection IP
@@ -62,10 +70,9 @@ public class CardNetworkManager : MonoBehaviour
         return connectionPort;
     }
 
-    //send card request to server
-    internal void sendCardRequest(string cardType, string gameObjectName)
+    internal void sendCardAddedInfo(int number)
     {
-        cardNetworkView.RPC("cardRequest", RPCMode.Server, cardType, gameObjectName);
+        cardNetworkView.RPC("cardAdded", RPCMode.Server, number);
     }
 
     //connect to server
@@ -83,13 +90,13 @@ public class CardNetworkManager : MonoBehaviour
         }
         catch (Exception)
         {
-            menu.addInfo("Server is not running or check IP and port \n");
+            Debug.Log("Check IP and port"); 
         }
     }
 
     internal void moveCard(int from, int to)
     {
-        cardNetworkView.RPC("moveCard", RPCMode.Server, from, to);
+        cardNetworkView.RPC("moveCardRequest", RPCMode.Server, from, to);
     }
 
     // disconnecting form server
@@ -112,12 +119,17 @@ public class CardNetworkManager : MonoBehaviour
 
     void OnConnectedToServer()
     {
-        menu.addInfo("Connected to server \n");
+        menu.playerNotConnected = false;
     }
 
     void OnDisonnectedFromServer()
     {
-        menu.addInfo("Disconnected from server");
+        Debug.Log("Disconnected from server");
+    }
+
+    internal void sendMoveCardRequest(int from, int to)
+    {
+        cardNetworkView.RPC("moveCardRequest", RPCMode.Server, from, to);
     }
 
     //RPCs sent to server
@@ -128,10 +140,10 @@ public class CardNetworkManager : MonoBehaviour
     void Login(string username, string password) { }
 
     [RPC]
-    void cardRequest(string cardType, string gameObjectName) { }
+    void moveCardRequest(int from, int to) { }
 
     [RPC]
-    void moveCard() { }
+    void cardAdded(int number) {}
     
 
 
@@ -142,59 +154,70 @@ public class CardNetworkManager : MonoBehaviour
     [RPC]
     void userRegistered()
     {
-        Application.LoadLevel(3);
+        menu.userNotRegistered = false;
     }
 
     [RPC]
     void usernameExists()
     {
-        menu.addInfo("Username already exists \n");
+        menu.userNameNotExists = false;
     }
 
     [RPC]
     void userNotFound()
     {
-        menu.addInfo("Wrong username\n");
+        menu.userNameNotExists = true;
     }
 
     [RPC]
     void wrongPassword()
     {
-        menu.addInfo("Wrong password\n");
+        menu.wrongPassword = true;
     }
 
     [RPC]
     void loginSuccess()
     {
-        Application.LoadLevel(1);
-
+        menu.userLoggedIn = true;
     }
 
     // gameplay RPCs
     [RPC]
     void noCard()
     {
-        menu.addInfo("No card selected \n");
+        Debug.Log("No card sellected");
     }
 
     [RPC]
-    void addCard(int attack, int defense, string gameObjectName)
+    void addCard(int cardID, string cardName, string cardType, int cardHP, int cardAttack, int cardPassive, string cardDescription, int cardHealing, int cardIntercept)
     {
-        card = GameObject.Find(gameObjectName);
-        cardManager = card.GetComponent<CardManager>();
-        cardManager.addCard(attack, defense);
+        cardManager.addCard(cardID, cardName, cardType, cardHP, cardAttack, cardPassive, cardDescription, cardHealing, cardIntercept);
     }
 
-    [RPC]
     void cardMoved(int from, int to)
     {
-        cardManager.moveCard(from, to);
+        cardManager.setMovingPhaseInactive();
+        textController.showTextMessage("Tura przeciwnika");
+    }
+
+
+    [RPC]
+    void movingPhaseBegins()
+    {
+        cardManager.setMovingPhaseActive();
+        textController.showTextMessage("Twoja tura");
+    }
+
+    [RPC]
+    void drawingCards()
+    {
+        cardManager.setDrawingCard();
     }
 
     [RPC]
     void cardCannotBeMoved()
     {
-
+        textController.showTextMessage("Błąd przesunięcia karty");
     }
 }
 
