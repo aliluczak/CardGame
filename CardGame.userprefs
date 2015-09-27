@@ -1,15 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\MouseDrag.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\CardGameServer\Assets\scripts\GameManager.cs">
     <Files>
-      <File FileName="Assets\scripts\ControllManager.cs" Line="15" Column="3" />
-      <File FileName="Assets\scripts\MouseDrag.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\CardManager.cs" Line="1" Column="1" />
+      <File FileName="..\CardGameServer\Assets\scripts\GameManager.cs" Line="199" Column="21" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="C:\Users\ola\Documents\GitHub\CardGameServer\Assets\scripts\DatabaseManager.cs" line="24" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
