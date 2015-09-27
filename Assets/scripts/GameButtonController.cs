@@ -5,18 +5,18 @@ using UnityEngine.UI;
 public class GameButtonController : MonoBehaviour {
 
     private bool buttonActive;
-    private SpriteRenderer renderer;
     private GameObject cardNetworkManagerObject;
     private CardNetworkManager cardNetworkManager;
     private GameObject cardManagerObject;
     private CardManager cardManager;
+    private Button button;
 
 
     void Start()
     {
-        renderer = GetComponent<SpriteRenderer>();
-        cardNetworkManagerObject = GameObject.Find("NetworkManager");
-        cardNetworkManager = cardNetworkManagerObject.GetComponent<CardNetworkManager>();
+        button = GetComponent<Button>();
+ //       cardNetworkManagerObject = GameObject.Find("NetworkManager");
+ //       cardNetworkManager = cardNetworkManagerObject.GetComponent<CardNetworkManager>();
         cardManagerObject = GameObject.Find("CardManager");
         cardManager = cardManagerObject.GetComponent<CardManager>();
         setButtonInactive();
@@ -25,13 +25,13 @@ public class GameButtonController : MonoBehaviour {
     internal void setButtonActive()
     {
         buttonActive = true;
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        button.image.color = new Color(255f, 255f, 255f, 1.0f);
     }
 
     internal void setButtonInactive()
     {
         buttonActive = false;
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 0);
+        button.image.color = new Color(255f, 255f, 255f, 0f);
     }
 
     public void applyMove()
@@ -40,8 +40,9 @@ public class GameButtonController : MonoBehaviour {
         {
             if (!cardManager.getMagicCard())
             {
-                cardNetworkManager.sendMoveCardRequest(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+               // cardNetworkManager.sendMoveCardRequest(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
                 cardManager.changeCardPosition(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+                
             }
             else
             {

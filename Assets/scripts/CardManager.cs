@@ -12,7 +12,6 @@ public class CardManager : MonoBehaviour {
     public List<Sprite> charactersList;
     private GameObject gameObject;
     private CardNetworkManager cardNetworkManager;
-    private string infoCard ="";
 
     private GameObject heroCard;
     private GameObject supportCard;
@@ -43,8 +42,6 @@ public class CardManager : MonoBehaviour {
     private List<Card> board;
     private List<bool> cardOnBoard;
 
-    private enum CardField { HERO, SUPPORT, RANDOM1, RANDOM2, RANDOM3 };
-
     private bool movingPhase;
     private int cardSelected;
     private bool drawingCard1;
@@ -55,7 +52,6 @@ public class CardManager : MonoBehaviour {
     private int movingCardTo;
 
     private bool magicCard;
-
 
 	// Use this for initialization
     void Start()
@@ -69,7 +65,6 @@ public class CardManager : MonoBehaviour {
         {
             DestroyImmediate(this.gameObject);
         }
-        
     }
 
     void OnLevelWasLoaded(int level)
@@ -80,13 +75,13 @@ public class CardManager : MonoBehaviour {
             charactersList = new List<Sprite>();
             board = new List<Card>();
 
-            heroCard = GameObject.Find("Hero");
+         //   heroCard = GameObject.Find("Hero");
             board.Add(heroCard.GetComponent<Card>());
-            heroController = heroCard.GetComponent<spriteController>();
+           // heroController = heroCard.GetComponent<spriteController>();
 
-            supportCard = GameObject.Find("Support");
+       //     supportCard = GameObject.Find("Support");
             board.Add(supportCard.GetComponent<Card>());
-            supportController = supportController.GetComponent<spriteController>();
+         //   supportController = supportController.GetComponent<spriteController>();
 
             random1Card = GameObject.Find("RandomHero");
             board.Add(random1Card.GetComponent<Card>());
@@ -127,6 +122,7 @@ public class CardManager : MonoBehaviour {
             }
 
             magicCard = false;
+            setCardDeselected();
         }
 
         if (level == 5)
@@ -155,12 +151,6 @@ public class CardManager : MonoBehaviour {
         }
         else
         {
-
-            if (!cardOnBoard[from])
-            {
-                textController.showTextMessage("Nie wybrano karty");
-                possible = false;
-            }
 
             if (cardOnBoard[to])
             {
@@ -194,12 +184,14 @@ public class CardManager : MonoBehaviour {
             {
                 case 0:
                     {
-                        heroController.showImage(charactersList[from]);
+                        heroController.showImage(charactersList[1]);
+                        supportController.hideImage();
                         break;
                     }
                 case 1:
                     {
-                        supportController.showImage(charactersList[from]);
+                        supportController.showImage(charactersList[from+14]);
+                        heroController.hideImage();
                         break;
                     }
             }
@@ -297,6 +289,11 @@ public class CardManager : MonoBehaviour {
     {
         heroController.highlightImage();
         supportController.highlightImage();
+    }
+
+    public void textMessage(string info)
+    {
+        textController.showTextMessage(info);
     }
 
     public void setAllButtonsInactive()

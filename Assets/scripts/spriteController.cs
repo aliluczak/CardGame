@@ -6,18 +6,16 @@ public class spriteController : MonoBehaviour {
 
     private GameObject cardManagerObject;
     private CardManager cardManager;
-    private Sprite texture;
-    private SpriteRenderer renderer;
+    private Image image;
 	// Use this for initialization
 	void Start () 
     {
         cardManagerObject = GameObject.Find("CardManager");
         cardManager = cardManagerObject.GetComponent<CardManager>();
-        texture = gameObject.GetComponent<Sprite>();
-        renderer = gameObject.GetComponent<SpriteRenderer>();
+        image = GetComponent<Image>();
 	}
 
-    void OnMouseDown()
+    public void imageClick()
     {
         if (cardManager.movingPhaseIsActive())
         {
@@ -28,7 +26,7 @@ public class spriteController : MonoBehaviour {
                     {
                         cardManager.setCardSelected(2);
                         cardManager.highlightSprites();
-
+                        Debug.Log("Card seleted");
                         break;
                     }
                 case "RandomCard1":
@@ -63,6 +61,10 @@ public class spriteController : MonoBehaviour {
                         {
                             cardManager.tryMoveCard(cardManager.whichCardSelected(), 0);
                         }
+                        else
+                        {
+                            cardManager.textMessage("Nie wybrano karty");
+                        }
 
                         break;
                     }
@@ -86,27 +88,28 @@ public class spriteController : MonoBehaviour {
 
     public void showImage(Sprite image)
     {
-        texture = image;
+        this.image.sprite = image;
     }
 
     public void showImage()
     {
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.image.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
     public void highlightImage()
     {
-        texture = null;
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        this.image.sprite = null;
+        this.image.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
     }
 
     public void hideImage()
     {
-        texture = null;
+        this.image.sprite= null;
+        this.image.color = new Color(1.0f, 1.0f, 1.0f, 0f);
     }
 
     public void possibleHideImage()
     {
-        renderer.color = new Color (1.0f, 1.0f, 1.0f, 0.5f);
+        this.image.color = new Color (1.0f, 1.0f, 1.0f, 0f);
     }
 
 }
