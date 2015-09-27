@@ -38,6 +38,15 @@ public class CardManager : MonoBehaviour {
     private spriteController enemyHeroController;
     private spriteController enemySupportController;
     private TextController textController;
+    private GameObject playerNameObject;
+    private GameObject playerHpObject;
+    private GameObject opponentNameObject;
+    private GameObject opponentHpObject;
+
+    private TextController playerNameController;
+    private TextController playerHPController;
+    private TextController opponentNameController;
+    private TextController opponentHPController;
 
     private List<Card> board;
     private List<bool> cardOnBoard;
@@ -75,13 +84,13 @@ public class CardManager : MonoBehaviour {
             charactersList = new List<Sprite>();
             board = new List<Card>();
 
-         //   heroCard = GameObject.Find("Hero");
+            heroCard = GameObject.Find("Hero");
             board.Add(heroCard.GetComponent<Card>());
-           // heroController = heroCard.GetComponent<spriteController>();
+            heroController = heroCard.GetComponent<spriteController>();
 
-       //     supportCard = GameObject.Find("Support");
+            supportCard = GameObject.Find("Support");
             board.Add(supportCard.GetComponent<Card>());
-         //   supportController = supportController.GetComponent<spriteController>();
+            supportController = supportController.GetComponent<spriteController>();
 
             random1Card = GameObject.Find("RandomHero");
             board.Add(random1Card.GetComponent<Card>());
@@ -115,6 +124,16 @@ public class CardManager : MonoBehaviour {
 
             endPhaseButton = GameObject.Find("EndMovingButton");
             endPhaseButtonController = endPhaseButton.GetComponent<GameButtonController>();
+
+            playerNameObject = GameObject.Find("PlayerName");
+            playerHpObject = GameObject.Find("PlayerHP");
+            opponentNameObject = GameObject.Find("OpponentName");
+            opponentHpObject = GameObject.Find("OpponentHP");
+
+            playerNameController = playerNameObject.GetComponent<TextController>();
+            playerHPController = playerHpObject.GetComponent<TextController>();
+            opponentNameController = opponentNameObject.GetComponent<TextController>();
+            opponentHPController = opponentHpObject.GetComponent<TextController>();
 
             for (int i = 0; i < 7; i++)
             {
@@ -407,10 +426,4 @@ public class CardManager : MonoBehaviour {
         cancelButtonController.setButtonActive();
         setMagicCard(true);
     }
-    /*
-    public string getFiledInfo(Image field)
-    {
-        if ()
-    }
-    */
 }
