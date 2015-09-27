@@ -21,42 +21,67 @@ public class spriteController : MonoBehaviour {
     {
         if (cardManager.movingPhaseIsActive())
         {
+            bool magicCard = false;
             switch (this.gameObject.name)
             {
                 case "RandomHero":
                     {
                         cardManager.setCardSelected(2);
                         cardManager.highlightSprites();
+
                         break;
                     }
                 case "RandomCard1":
                     {
                         cardManager.setCardSelected(3);
-                        cardManager.highlightSprites();
+                        if (cardManager.checkCardType(3).Equals("HERO"))
+                        {
+                            cardManager.highlightSprites();
+                        }
+                        else
+                        {
+                            magicCard = true;
+                        }
                         break;
                     }
                 case "RandowmCard2":
                     {
                         cardManager.setCardSelected(4);
-                        cardManager.highlightSprites();
+                        if (cardManager.checkCardType(4).Equals("HERO"))
+                        {
+                            cardManager.highlightSprites();
+                        }
+                        else
+                        {
+                            magicCard = true;
+                        }
                         break;
                     }
                 case "Hero":
                     {
-                        if (cardManager.whichCardSelected()!=-1)
+                        if (cardManager.whichCardSelected() != -1 && !magicCard)
                         {
                             cardManager.tryMoveCard(cardManager.whichCardSelected(), 0);
                         }
 
                         break;
                     }
+                case "Support":
+                    {
+                        if (cardManager.whichCardSelected() != -1 && !magicCard)
+                        {
+                            cardManager.tryMoveCard(cardManager.whichCardSelected(), 1);
+                        }
+
+                        break;
+                    }
+            }
+
+            if (magicCard)
+            {
+                cardManager.useMagicButton();
             }
         }
-        else
-        {
-            //TODO
-        } 
-
     }
 
     public void showImage(Sprite image)

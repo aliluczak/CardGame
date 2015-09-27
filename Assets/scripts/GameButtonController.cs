@@ -19,6 +19,7 @@ public class GameButtonController : MonoBehaviour {
         cardNetworkManager = cardNetworkManagerObject.GetComponent<CardNetworkManager>();
         cardManagerObject = GameObject.Find("CardManager");
         cardManager = cardManagerObject.GetComponent<CardManager>();
+        setButtonInactive();
     }
 
     internal void setButtonActive()
@@ -33,17 +34,31 @@ public class GameButtonController : MonoBehaviour {
         renderer.color = new Color(1.0f, 1.0f, 1.0f, 0);
     }
 
-    internal void applyMove()
+    public void applyMove()
     {
-        cardNetworkManager.sendMoveCardRequest(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+        if (buttonActive)
+        {
+            if (!cardManager.getMagicCard())
+            {
+                cardNetworkManager.sendMoveCardRequest(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+                cardManager.changeCardPosition(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+            }
+            else
+            {
+                cardNetworkManager.sendMagic(cardManager.getMovingCardFrom());
+            }
+
+            cardManager.setAllButtonsInactive();
+        }
     }
 
-    internal void cancelMove()
+    public void cancelMove()
     {
-        cardManager.cancelMove(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+        if(buttonActive)
+            cardManager.cancelMove(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
     }
 
-    internal void endMove()
+    public void endMove()
     {
 
     }

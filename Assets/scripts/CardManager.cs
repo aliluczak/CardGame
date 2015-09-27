@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class CardManager : MonoBehaviour {
 
@@ -20,9 +21,15 @@ public class CardManager : MonoBehaviour {
     private GameObject random3Card;
     private GameObject enemyHeroCard;
     private GameObject enemySupportCard;
-    private GameObject endMovingfButton;
+    private GameObject applyButton;
+    private GameObject cancelButton;
+    private GameObject endPhaseButton;
 
     private GameObject infoTextObject;
+
+    private GameButtonController applyButtonController;
+    private GameButtonController cancelButtonController;
+    private GameButtonController endPhaseButtonController;
 
     private spriteController random1Controller;
     private spriteController random2Controller;
@@ -46,6 +53,8 @@ public class CardManager : MonoBehaviour {
 
     private int movingCardFrom;
     private int movingCardTo;
+
+    private bool magicCard;
 
 
 	// Use this for initialization
@@ -103,10 +112,21 @@ public class CardManager : MonoBehaviour {
             infoTextObject = GameObject.Find("Info");
             textController = infoTextObject.GetComponent<TextController>();
 
+            applyButton = GameObject.Find("ApplyMove");
+            applyButtonController = applyButton.GetComponent<GameButtonController>();
+
+            cancelButton = GameObject.Find("CancelMove");
+            cancelButtonController = cancelButton.GetComponent<GameButtonController>();
+
+            endPhaseButton = GameObject.Find("EndMovingButton");
+            endPhaseButtonController = endPhaseButton.GetComponent<GameButtonController>();
+
             for (int i = 0; i < 7; i++)
             {
                 cardOnBoard.Add(false);
             }
+
+            magicCard = false;
         }
 
         if (level == 5)
@@ -114,6 +134,16 @@ public class CardManager : MonoBehaviour {
             gameObject = GameObject.Find("NetworkManager");
             cardNetworkManager = gameObject.GetComponent<CardNetworkManager>();
         }
+    }
+
+    public void setMagicCard(bool info)
+    {
+        magicCard = info;
+    }
+
+    public bool getMagicCard()
+    {
+        return magicCard;
     }
 
     public void tryMoveCard(int from, int to)
@@ -173,7 +203,8 @@ public class CardManager : MonoBehaviour {
                         break;
                     }
             }
-
+            applyButtonController.setButtonActive();
+            cancelButtonController.setButtonActive();
             movingCardFrom = from;
             movingCardTo = to;
         }
@@ -217,6 +248,8 @@ public class CardManager : MonoBehaviour {
 
         from = -1;
         to = -1;
+        applyButtonController.setButtonInactive();
+        cancelButtonController.setButtonInactive();
     }
 
     internal int getMovingCardFrom()
@@ -264,6 +297,12 @@ public class CardManager : MonoBehaviour {
     {
         heroController.highlightImage();
         supportController.highlightImage();
+    }
+
+    public void setAllButtonsInactive()
+    {
+        applyButtonController.setButtonInactive();
+        cancelButtonController.setButtonInactive();
     }
 
     public void addCard(int cardID, string cardName, string cardType, int cardHP, int cardAttack, int cardPassive, string cardDescription, int cardHealing, int cardIntercept)
@@ -318,7 +357,58 @@ public class CardManager : MonoBehaviour {
                     drawingCard3 = true;
                     break;
                 }
+        }  
+    }
+
+    public Card findOnPosition(int i)
+    {
+        return board.Find(ByPosition(i));
+    }
+
+    public void changeCardPosition(int from, int to)
+    {
+        findOnPosition(from).setPosition(to);
+        cardOnBoard[from] = false;
+        cardOnBoard[to] = true;
+    }
+
+    static Predicate<Card> ByPosition(int i)
+    {
+        return delegate(Card card)
+        {
+            return card.getPosition() == i;
+        };
+    }
+
+    public string checkCardType(int i)
+    {
+        return findOnPosition(i).getType();
+    }
+
+    public void useMagicButton() 
+    {
+        switch (cardSelected)
+        {
+            case 2:
+                {
+                    random1Controller.possibleHideImage();
+                    break;
+                }
+            case 3:
+                {
+                    random2Controller.possibleHideImage();
+                    break;
+                }
+            case 4:
+                {
+                    random3Controller.possibleHideImage();
+                    break;
+                }
         }
+
+        applyButtonController.setButtonActive();
+        cancelButtonController.setButtonActive();
+        setMagicCard(true);
     }
     /*
     public string getFiledInfo(Image field)
