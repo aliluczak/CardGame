@@ -22,9 +22,4 @@ public class TextController : MonoBehaviour {
         yield return new WaitForSeconds(1.5f);
         textShown.text = ""; 
     }
-
-    public void setText(string info)
-    {
-        textShown.text = info;
-    }
 }
