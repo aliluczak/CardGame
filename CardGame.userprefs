@@ -1,9 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\MouseDrag.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\spriteController.cs">
     <Files>
-      <File FileName="Assets\scripts\ControllManager.cs" Line="15" Column="3" />
-      <File FileName="Assets\scripts\MouseDrag.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\ButtonPress.cs" Line="52" Column="1" />
+      <File FileName="Assets\scripts\Card.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\CardManager.cs" Line="18" Column="36" />
+      <File FileName="Assets\scripts\GameButtonController.cs" Line="51" Column="1" />
+      <File FileName="Assets\scripts\spriteController.cs" Line="88" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
