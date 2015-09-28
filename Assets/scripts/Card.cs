@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-internal class Card : MonoBehaviour
+public class Card : MonoBehaviour
 {
 
     internal string cardName;
@@ -47,5 +47,19 @@ internal class Card : MonoBehaviour
         this.actualPosition = position;
     }
 
+    public int getPosition() 
+    {
+        return this.actualPosition;
+    }
+
+    public void setPosition(int i)
+    {
+        this.actualPosition = i;
+    }
+
+    public string getType()
+    {
+        return this.cardType.ToString();
+    }
 
 }

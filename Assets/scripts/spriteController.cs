@@ -6,82 +6,110 @@ public class spriteController : MonoBehaviour {
 
     private GameObject cardManagerObject;
     private CardManager cardManager;
-    private Sprite texture;
-    private SpriteRenderer renderer;
+    private Image image;
 	// Use this for initialization
 	void Start () 
     {
         cardManagerObject = GameObject.Find("CardManager");
         cardManager = cardManagerObject.GetComponent<CardManager>();
-        texture = gameObject.GetComponent<Sprite>();
-        renderer = gameObject.GetComponent<SpriteRenderer>();
+        image = GetComponent<Image>();
 	}
 
-    void OnMouseDown()
+    public void imageClick()
     {
         if (cardManager.movingPhaseIsActive())
         {
+            bool magicCard = false;
             switch (this.gameObject.name)
             {
                 case "RandomHero":
                     {
                         cardManager.setCardSelected(2);
                         cardManager.highlightSprites();
+                        Debug.Log("Card seleted");
                         break;
                     }
                 case "RandomCard1":
                     {
                         cardManager.setCardSelected(3);
-                        cardManager.highlightSprites();
+                        if (cardManager.checkCardType(3).Equals("HERO"))
+                        {
+                            cardManager.highlightSprites();
+                        }
+                        else
+                        {
+                            magicCard = true;
+                        }
                         break;
                     }
                 case "RandowmCard2":
                     {
                         cardManager.setCardSelected(4);
-                        cardManager.highlightSprites();
+                        if (cardManager.checkCardType(4).Equals("HERO"))
+                        {
+                            cardManager.highlightSprites();
+                        }
+                        else
+                        {
+                            magicCard = true;
+                        }
                         break;
                     }
                 case "Hero":
                     {
-                        if (cardManager.whichCardSelected()!=-1)
+                        if (cardManager.whichCardSelected() != -1 && !magicCard)
                         {
                             cardManager.tryMoveCard(cardManager.whichCardSelected(), 0);
+                        }
+                        else
+                        {
+                            cardManager.textMessage("Nie wybrano karty");
+                        }
+
+                        break;
+                    }
+                case "Support":
+                    {
+                        if (cardManager.whichCardSelected() != -1 && !magicCard)
+                        {
+                            cardManager.tryMoveCard(cardManager.whichCardSelected(), 1);
                         }
 
                         break;
                     }
             }
-        }
-        else
-        {
-            //TODO
-        } 
 
+            if (magicCard)
+            {
+                cardManager.useMagicButton();
+            }
+        }
     }
 
     public void showImage(Sprite image)
     {
-        texture = image;
+        this.image.sprite = image;
     }
 
     public void showImage()
     {
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        this.image.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
     public void highlightImage()
     {
-        texture = null;
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        this.image.sprite = null;
+        this.image.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
     }
 
     public void hideImage()
     {
-        texture = null;
+        this.image.sprite= null;
+        this.image.color = new Color(1.0f, 1.0f, 1.0f, 0f);
     }
 
     public void possibleHideImage()
     {
-        renderer.color = new Color (1.0f, 1.0f, 1.0f, 0.5f);
+        this.image.color = new Color (1.0f, 1.0f, 1.0f, 0f);
     }
 
 }

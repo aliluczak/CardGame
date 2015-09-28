@@ -5,45 +5,61 @@ using UnityEngine.UI;
 public class GameButtonController : MonoBehaviour {
 
     private bool buttonActive;
-    private SpriteRenderer renderer;
     private GameObject cardNetworkManagerObject;
     private CardNetworkManager cardNetworkManager;
     private GameObject cardManagerObject;
     private CardManager cardManager;
+    private Button button;
 
 
     void Start()
     {
-        renderer = GetComponent<SpriteRenderer>();
-        cardNetworkManagerObject = GameObject.Find("NetworkManager");
-        cardNetworkManager = cardNetworkManagerObject.GetComponent<CardNetworkManager>();
+        button = GetComponent<Button>();
+ //       cardNetworkManagerObject = GameObject.Find("NetworkManager");
+ //       cardNetworkManager = cardNetworkManagerObject.GetComponent<CardNetworkManager>();
         cardManagerObject = GameObject.Find("CardManager");
         cardManager = cardManagerObject.GetComponent<CardManager>();
+        setButtonInactive();
     }
 
     internal void setButtonActive()
     {
         buttonActive = true;
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        button.image.color = new Color(255f, 255f, 255f, 1.0f);
     }
 
     internal void setButtonInactive()
     {
         buttonActive = false;
-        renderer.color = new Color(1.0f, 1.0f, 1.0f, 0);
+        button.image.color = new Color(255f, 255f, 255f, 0f);
     }
 
-    internal void applyMove()
+    public void applyMove()
     {
-        cardNetworkManager.sendMoveCardRequest(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+        if (buttonActive)
+        {
+            if (!cardManager.getMagicCard())
+            {
+               // cardNetworkManager.sendMoveCardRequest(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+                cardManager.changeCardPosition(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+                
+            }
+            else
+            {
+                cardNetworkManager.sendMagic(cardManager.getMovingCardFrom());
+            }
+
+            cardManager.setAllButtonsInactive();
+        }
     }
 
-    internal void cancelMove()
+    public void cancelMove()
     {
-        cardManager.cancelMove(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+        if(buttonActive)
+            cardManager.cancelMove(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
     }
 
-    internal void endMove()
+    public void endMove()
     {
 
     }

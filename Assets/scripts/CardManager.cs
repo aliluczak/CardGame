@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class CardManager : MonoBehaviour {
 
@@ -11,7 +12,6 @@ public class CardManager : MonoBehaviour {
     public List<Sprite> charactersList;
     private GameObject gameObject;
     private CardNetworkManager cardNetworkManager;
-    private string infoCard ="";
 
     private GameObject heroCard;
     private GameObject supportCard;
@@ -20,9 +20,15 @@ public class CardManager : MonoBehaviour {
     private GameObject random3Card;
     private GameObject enemyHeroCard;
     private GameObject enemySupportCard;
-    private GameObject endMovingfButton;
+    private GameObject applyButton;
+    private GameObject cancelButton;
+    private GameObject endPhaseButton;
 
     private GameObject infoTextObject;
+
+    private GameButtonController applyButtonController;
+    private GameButtonController cancelButtonController;
+    private GameButtonController endPhaseButtonController;
 
     private spriteController random1Controller;
     private spriteController random2Controller;
@@ -32,11 +38,18 @@ public class CardManager : MonoBehaviour {
     private spriteController enemyHeroController;
     private spriteController enemySupportController;
     private TextController textController;
+    private GameObject playerNameObject;
+    private GameObject playerHpObject;
+    private GameObject opponentNameObject;
+    private GameObject opponentHpObject;
+
+    private TextController playerNameController;
+    private TextController playerHPController;
+    private TextController opponentNameController;
+    private TextController opponentHPController;
 
     private List<Card> board;
     private List<bool> cardOnBoard;
-
-    private enum CardField { HERO, SUPPORT, RANDOM1, RANDOM2, RANDOM3 };
 
     private bool movingPhase;
     private int cardSelected;
@@ -47,6 +60,7 @@ public class CardManager : MonoBehaviour {
     private int movingCardFrom;
     private int movingCardTo;
 
+    private bool magicCard;
 
 	// Use this for initialization
     void Start()
@@ -60,7 +74,6 @@ public class CardManager : MonoBehaviour {
         {
             DestroyImmediate(this.gameObject);
         }
-        
     }
 
     void OnLevelWasLoaded(int level)
@@ -103,10 +116,32 @@ public class CardManager : MonoBehaviour {
             infoTextObject = GameObject.Find("Info");
             textController = infoTextObject.GetComponent<TextController>();
 
+            applyButton = GameObject.Find("ApplyMove");
+            applyButtonController = applyButton.GetComponent<GameButtonController>();
+
+            cancelButton = GameObject.Find("CancelMove");
+            cancelButtonController = cancelButton.GetComponent<GameButtonController>();
+
+            endPhaseButton = GameObject.Find("EndMovingButton");
+            endPhaseButtonController = endPhaseButton.GetComponent<GameButtonController>();
+
+            playerNameObject = GameObject.Find("PlayerName");
+            playerHpObject = GameObject.Find("PlayerHP");
+            opponentNameObject = GameObject.Find("OpponentName");
+            opponentHpObject = GameObject.Find("OpponentHP");
+
+            playerNameController = playerNameObject.GetComponent<TextController>();
+            playerHPController = playerHpObject.GetComponent<TextController>();
+            opponentNameController = opponentNameObject.GetComponent<TextController>();
+            opponentHPController = opponentHpObject.GetComponent<TextController>();
+
             for (int i = 0; i < 7; i++)
             {
                 cardOnBoard.Add(false);
             }
+
+            magicCard = false;
+            setCardDeselected();
         }
 
         if (level == 5)
@@ -114,6 +149,16 @@ public class CardManager : MonoBehaviour {
             gameObject = GameObject.Find("NetworkManager");
             cardNetworkManager = gameObject.GetComponent<CardNetworkManager>();
         }
+    }
+
+    public void setMagicCard(bool info)
+    {
+        magicCard = info;
+    }
+
+    public bool getMagicCard()
+    {
+        return magicCard;
     }
 
     public void tryMoveCard(int from, int to)
@@ -125,12 +170,6 @@ public class CardManager : MonoBehaviour {
         }
         else
         {
-
-            if (!cardOnBoard[from])
-            {
-                textController.showTextMessage("Nie wybrano karty");
-                possible = false;
-            }
 
             if (cardOnBoard[to])
             {
@@ -164,16 +203,19 @@ public class CardManager : MonoBehaviour {
             {
                 case 0:
                     {
-                        heroController.showImage(charactersList[from]);
+                        heroController.showImage(charactersList[1]);
+                        supportController.hideImage();
                         break;
                     }
                 case 1:
                     {
-                        supportController.showImage(charactersList[from]);
+                        supportController.showImage(charactersList[from+14]);
+                        heroController.hideImage();
                         break;
                     }
             }
-
+            applyButtonController.setButtonActive();
+            cancelButtonController.setButtonActive();
             movingCardFrom = from;
             movingCardTo = to;
         }
@@ -217,6 +259,8 @@ public class CardManager : MonoBehaviour {
 
         from = -1;
         to = -1;
+        applyButtonController.setButtonInactive();
+        cancelButtonController.setButtonInactive();
     }
 
     internal int getMovingCardFrom()
@@ -264,6 +308,17 @@ public class CardManager : MonoBehaviour {
     {
         heroController.highlightImage();
         supportController.highlightImage();
+    }
+
+    public void textMessage(string info)
+    {
+        textController.showTextMessage(info);
+    }
+
+    public void setAllButtonsInactive()
+    {
+        applyButtonController.setButtonInactive();
+        cancelButtonController.setButtonInactive();
     }
 
     public void addCard(int cardID, string cardName, string cardType, int cardHP, int cardAttack, int cardPassive, string cardDescription, int cardHealing, int cardIntercept)
@@ -318,12 +373,57 @@ public class CardManager : MonoBehaviour {
                     drawingCard3 = true;
                     break;
                 }
-        }
+        }  
     }
-    /*
-    public string getFiledInfo(Image field)
+
+    public Card findOnPosition(int i)
     {
-        if ()
+        return board.Find(ByPosition(i));
     }
-    */
+
+    public void changeCardPosition(int from, int to)
+    {
+        findOnPosition(from).setPosition(to);
+        cardOnBoard[from] = false;
+        cardOnBoard[to] = true;
+    }
+
+    static Predicate<Card> ByPosition(int i)
+    {
+        return delegate(Card card)
+        {
+            return card.getPosition() == i;
+        };
+    }
+
+    public string checkCardType(int i)
+    {
+        return findOnPosition(i).getType();
+    }
+
+    public void useMagicButton() 
+    {
+        switch (cardSelected)
+        {
+            case 2:
+                {
+                    random1Controller.possibleHideImage();
+                    break;
+                }
+            case 3:
+                {
+                    random2Controller.possibleHideImage();
+                    break;
+                }
+            case 4:
+                {
+                    random3Controller.possibleHideImage();
+                    break;
+                }
+        }
+
+        applyButtonController.setButtonActive();
+        cancelButtonController.setButtonActive();
+        setMagicCard(true);
+    }
 }

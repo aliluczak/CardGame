@@ -99,6 +99,17 @@ public class CardNetworkManager : MonoBehaviour
         cardNetworkView.RPC("moveCardRequest", RPCMode.Server, from, to);
     }
 
+    internal void sendMagic(int from)
+    {
+        cardNetworkView.RPC("magic", RPCMode.Server, from);
+    }
+
+    internal void sendEndPhase()
+    {
+        cardNetworkView.RPC("endMovePhase", RPCMode.Server);
+        Debug.Log("Koniec fazy ruchu");
+    }
+
     // disconnecting form server
     internal void disconnect()
     {
@@ -145,6 +156,11 @@ public class CardNetworkManager : MonoBehaviour
     [RPC]
     void cardAdded(int number) {}
     
+    [RPC]
+    void magic(int from) { }
+
+    [RPC]
+    void endMovePhase() { }
 
 
     // RPCs received from server
