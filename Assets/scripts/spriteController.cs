@@ -50,6 +50,14 @@ public class spriteController : MonoBehaviour {
 
                         break;
                     }
+                case "Support":
+                    {
+                        if (cardManager.whichCardSelected() != -1)
+                        {
+                            cardManager.tryMoveCard(cardManager.whichCardSelected(), 1);
+                        }
+                        break;
+                    }
             }
         }
         else

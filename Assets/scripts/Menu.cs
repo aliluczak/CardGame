@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.IO;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour {
     
@@ -106,24 +107,24 @@ public class Menu : MonoBehaviour {
     //loads options from main menu
     public void showOptions()
     {
-        Application.LoadLevel("Options");
+        SceneManager.LoadScene("Options");
     }
 
     //loads regiser and login scene
     public void playButton()
     {
-        Application.LoadLevel("RegisterLogin");
+        SceneManager.LoadScene("RegisterLogin");
     }
 
     //loads registering
     public void register()
     {
-        Application.LoadLevel("Register");
+        SceneManager.LoadScene("Register");
     }
 
     public void login()
     {
-        Application.LoadLevel("Login");
+        SceneManager.LoadScene("Login");
     }
 
     // TODO OLA all the functions below perhaps need a variable of keyboard to be added above
@@ -196,6 +197,7 @@ public class Menu : MonoBehaviour {
         if (userLoggedIn)
         {
             userLoggedIn = false;
+
             Application.LoadLevel(1);
         }
         else if (userNameNotExists)

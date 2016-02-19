@@ -1,6 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.Networking;
+
+
+public class MyMSGTypes
+{
+    // msgs sent from server
+    public static short SendCard = 1001;
+    public static short NoCard = 1002;
+    public static short CardRequest = 1003;
+    public static short Win = 1004;
+    public static short Lose = 1005;
+    public static short UserRegistered = 1005;
+    public static short UsernameExists = 1006;
+    public static short UserNotFound = 1007;
+    public static short WrongPassword = 1008;
+    public static short LoginSuccess = 1009;
+    public static short CardMoved = 1010;
+    public static short CardCannotBeMoved = 1011;
+    public static short MovingPhaseBegins = 1012;
+    public static short DrawingCards = 1013;
+    public static short WaitForAnotherPlayer = 1014;
+    public static short Tie = 1022;
+
+    // msgs sent from client
+    public static short Register = 1016;
+    public static short MoveCardRequest = 1017;
+    public static short Login = 1018;
+    public static short CardAdded = 1019;
+    public static short Magic = 1020;
+    public static short endMovePhase = 1021;
+
+}
 
 public class CardNetworkManager : MonoBehaviour
 {
@@ -8,6 +40,7 @@ public class CardNetworkManager : MonoBehaviour
     //connection variables
     internal string connectionIP = "127.0.0.1";
     internal int connectionPort = 8000;
+    public NetworkClient client;
 
     //game objects and class variables
     private NetworkView cardNetworkView;
@@ -72,7 +105,9 @@ public class CardNetworkManager : MonoBehaviour
 
     internal void sendCardAddedInfo(int number)
     {
-        cardNetworkView.RPC("cardAdded", RPCMode.Server, number);
+        CardNumberMessage msg = new CardNumberMessage();
+        msg.cardNumber = number;
+        client.Send(MyMSGTypes.CardAdded, msg);
     }
 
     //connect to server
@@ -86,7 +121,9 @@ public class CardNetworkManager : MonoBehaviour
 
         try
         {
-            Network.Connect(connectionIP, connectionPort);
+            client = new NetworkClient();
+            client.Connect(connectionIP, connectionPort);
+            registerHandlers();
         }
         catch (Exception)
         {
@@ -94,27 +131,49 @@ public class CardNetworkManager : MonoBehaviour
         }
     }
 
-    internal void moveCard(int from, int to)
+    private void registerHandlers()
     {
-        cardNetworkView.RPC("moveCardRequest", RPCMode.Server, from, to);
+        client.RegisterHandler(MyMSGTypes.SendCard, addCard);
+    //    client.RegisterHandler(MyMSGTypes.CardRequest, );
+        client.RegisterHandler(MyMSGTypes.NoCard, noCard);
+        //      client.RegisterHandler(MyMSGTypes.Win, Win);
+        //     client.RegisterHandler(MyMSGTypes.Lose, Lose);
+        client.RegisterHandler(MyMSGTypes.UserRegistered, userRegistered);
+        client.RegisterHandler(MyMSGTypes.UsernameExists, usernameExists);
+        client.RegisterHandler(MyMSGTypes.UserNotFound, userNotFound);
+        client.RegisterHandler(MyMSGTypes.WrongPassword, wrongPassword);
+        client.RegisterHandler(MyMSGTypes.LoginSuccess, loginSuccess);
+        client.RegisterHandler(MyMSGTypes.CardMoved, cardMoved);
+        client.RegisterHandler(MyMSGTypes.CardCannotBeMoved, cardCannotBeMoved);
+        client.RegisterHandler(MyMSGTypes.MovingPhaseBegins, movingPhaseBegins);
+        client.RegisterHandler(MyMSGTypes.DrawingCards, drawingCards);
+        client.RegisterHandler(MyMSGTypes.WaitForAnotherPlayer, waitForAnotherPlayer);
     }
+    
+  //  public static short Tie = 1022;
 
     // disconnecting form server
     internal void disconnect()
     {
-        Network.Disconnect();
+        client.Disconnect();
     }
 
     //register user
     internal void registerUser(string username, string password)
     {
-        cardNetworkView.RPC("Register", RPCMode.Server, username, password);
+        RegisterLoginMessage msg = new RegisterLoginMessage();
+        msg.userData[0] = username;
+        msg.userData[1] = password;
+        client.Send(MyMSGTypes.Register, msg);
     }
 
     // login user
     internal void loginUser(string username, string password)
     {
-        cardNetworkView.RPC("Login", RPCMode.Server, username, password);
+        RegisterLoginMessage msg = new RegisterLoginMessage();
+        msg.userData[0] = username;
+        msg.userData[1] = password;
+        client.Send(MyMSGTypes.Login, msg);
     }
 
     void OnConnectedToServer()
@@ -129,96 +188,94 @@ public class CardNetworkManager : MonoBehaviour
 
     internal void sendMoveCardRequest(int from, int to)
     {
-        cardNetworkView.RPC("moveCardRequest", RPCMode.Server, from, to);
+        MoveMessage msg = new MoveMessage();
+        msg.from = from;
+        msg.to = to;
+        client.Send(MyMSGTypes.MoveCardRequest, msg);
     }
-
-    //RPCs sent to server
-    [RPC]
-    void Register(string username, string password) { }
-
-    [RPC]
-    void Login(string username, string password) { }
-
-    [RPC]
-    void moveCardRequest(int from, int to) { }
-
-    [RPC]
-    void cardAdded(int number) {}
-    
+ 
 
 
     // RPCs received from server
 
     //RPC to connect, register and login
 
-    [RPC]
-    void userRegistered()
+
+    void userRegistered(NetworkMessage msg)
     {
         menu.userNotRegistered = false;
     }
 
-    [RPC]
-    void usernameExists()
+
+    void usernameExists(NetworkMessage msg)
     {
         menu.userNameNotExists = false;
     }
 
-    [RPC]
-    void userNotFound()
+
+    void userNotFound(NetworkMessage msg)
     {
         menu.userNameNotExists = true;
     }
 
-    [RPC]
-    void wrongPassword()
+
+    void wrongPassword(NetworkMessage msg)
     {
         menu.wrongPassword = true;
     }
 
-    [RPC]
-    void loginSuccess()
+
+    void loginSuccess(NetworkMessage msg)
     {
         menu.userLoggedIn = true;
     }
 
     // gameplay RPCs
-    [RPC]
-    void noCard()
+
+    void noCard(NetworkMessage msg)
     {
-        Debug.Log("No card sellected");
+        textController.showTextMessage("Nie wybrano karty");
     }
 
-    [RPC]
-    void addCard(int cardID, string cardName, string cardType, int cardHP, int cardAttack, int cardPassive, string cardDescription, int cardHealing, int cardIntercept)
+
+    void addCard(NetworkMessage msg)
     {
-        cardManager.addCard(cardID, cardName, cardType, cardHP, cardAttack, cardPassive, cardDescription, cardHealing, cardIntercept);
+        var reader = msg.ReadMessage<CardMessage>();
+
+        cardManager.addCard(reader.cardID, reader.cardName, reader.cardType, reader.cardHP, reader.cardAttack, reader.cardPassive, reader.cardDescription, reader.cardHealing, reader.cardIntercept);
     }
 
-    void cardMoved(int from, int to)
+    void cardMoved(NetworkMessage msg)
     {
         cardManager.setMovingPhaseInactive();
         textController.showTextMessage("Tura przeciwnika");
     }
 
 
-    [RPC]
-    void movingPhaseBegins()
+
+    void movingPhaseBegins(NetworkMessage msg)
     {
         cardManager.setMovingPhaseActive();
         textController.showTextMessage("Twoja tura");
     }
 
-    [RPC]
-    void drawingCards()
+
+    void drawingCards(NetworkMessage msg)
     {
         cardManager.setDrawingCard();
     }
 
-    [RPC]
-    void cardCannotBeMoved()
+    void cardCannotBeMoved(NetworkMessage msg)
     {
         textController.showTextMessage("Błąd przesunięcia karty");
     }
+
+    void waitForAnotherPlayer(NetworkMessage msg)
+    {
+
+    }
+
+
 }
 
 
