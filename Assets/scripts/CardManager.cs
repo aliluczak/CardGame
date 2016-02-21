@@ -8,6 +8,7 @@ public class CardManager : MonoBehaviour {
     private static CardManager instance;
 	//public string name;
 
+    
     public List<Sprite> charactersList;
     private GameObject gameObject;
     private CardNetworkManager cardNetworkManager;
@@ -32,6 +33,21 @@ public class CardManager : MonoBehaviour {
     private spriteController enemyHeroController;
     private spriteController enemySupportController;
     private TextController textController;
+    public Text playerName;
+    public Text playerHP;
+    public Text enemyName;
+    public Text enemyHP;
+
+    private CardImageController backgroundImage;
+    private CardImageController cardImage;
+    private cardTextController cardAttack;
+    private cardTextController cardHP;
+    private cardTextController cardDescription;
+    private cardTextController cardName;
+    private cardTextController cardType;
+
+    private List<string> supportDescrriptionInfo;
+    private List<string> magicDescriptionInfo;
 
     private List<Card> board;
     private List<bool> cardOnBoard;
@@ -60,6 +76,9 @@ public class CardManager : MonoBehaviour {
         {
             DestroyImmediate(this.gameObject);
         }
+
+        supportDescrriptionInfo = new List<string>();
+        magicDescriptionInfo = new List<string>();
         
     }
 
@@ -99,14 +118,53 @@ public class CardManager : MonoBehaviour {
             board.Add(enemySupportCard.GetComponent<Card>());
             enemySupportController = enemySupportCard.GetComponent<spriteController>();
 
+            playerName = GameObject.Find("PlayerName").GetComponent<Text>();
+            playerHP = GameObject.Find("PlayerHP").GetComponent<Text>();
+            enemyName = GameObject.Find("OpponentName").GetComponent<Text>();
+            enemyHP = GameObject.Find("OpponentHP").GetComponent<Text>();
+
+            backgroundImage = GameObject.Find("CardDetail").GetComponent<CardImageController>();
+            cardImage = GameObject.Find("CarddetailImage").GetComponent<CardImageController>();
+            cardAttack = GameObject.Find("CardAttack").GetComponent<cardTextController>();
+            cardHP = GameObject.Find("CardHP").GetComponent<cardTextController>();
+            cardDescription = GameObject.Find("Description").GetComponent<cardTextController>();
+            cardName = GameObject.Find("CardName").GetComponent<cardTextController>();
+            cardType = GameObject.Find("Type").GetComponent<cardTextController>();
+
+            supportDescrriptionInfo.Add("Wzmacnia atak o 1");
+            supportDescrriptionInfo.Add("Wzmacnia atak o 2");
+            supportDescrriptionInfo.Add("Leczy 1 HP");
+            supportDescrriptionInfo.Add("Leczy 2 HP");
+            supportDescrriptionInfo.Add("Przechwytuje 1 punkt ataku przeciwnika");
+            supportDescrriptionInfo.Add("Przechwytuje 2 punkty ataku przeciwnika");
+
+            magicDescriptionInfo.Add("Zadaje 2  punkty obrażeń");
+            magicDescriptionInfo.Add("Zadaje 2  punkty obrażeń");
+            magicDescriptionInfo.Add("Leczy 1 punkt życia");
+            magicDescriptionInfo.Add("Leczy 2 punkty życia");
+            magicDescriptionInfo.Add("Blokuje 1 punkt ataku");
+            magicDescriptionInfo.Add("Blokuje 2 punkty ataku");
+            magicDescriptionInfo.Add("Blokuje 1 punkt ataku");
+            magicDescriptionInfo.Add("Blokuje 1 punkt ataku");
+            magicDescriptionInfo.Add("Zadaje 1  punkt obrażeń");
+            magicDescriptionInfo.Add("Zadaje 1  punkt obrażeń");
+            magicDescriptionInfo.Add("Zadaje 2  punkty obrażeń");
+            magicDescriptionInfo.Add("Zadaje 2  punkty obrażeń");
+
+
+
             setMovingPhaseInactive();
             infoTextObject = GameObject.Find("Info");
             textController = infoTextObject.GetComponent<TextController>();
+
+            playerName.text = cardNetworkManager.playerName;
+            playerHP.text = "10";
 
             for (int i = 0; i < 7; i++)
             {
                 cardOnBoard.Add(false);
             }
+            cardNetworkManager.sendGameLoadedInfo();
         }
 
         if (level == 5)
@@ -219,6 +277,37 @@ public class CardManager : MonoBehaviour {
         to = -1;
     }
 
+    public void showCardDetail(int position)
+    {
+        switch (board[position].cardType)
+        {
+            case Card.CardType.HERO:
+                {
+                    backgroundImage.showImage(charactersList[48]);
+                    cardImage.showImage(charactersList[board[position].id]);
+                    cardAttack.showNumberText(board[position].cardAttack.ToString());
+                    cardHP.showNumberText(board[position].cardHP.ToString());
+                    cardDescription.showDescriptionText(supportDescrriptionInfo[board[position].cardPassive]);
+                    cardName.showDescriptionText(board[position].cardName);
+                    cardType.showDescriptionText(board[position].cardType.ToString());
+                    break;
+                }
+
+            case Card.CardType.SPELL:
+                {
+                    backgroundImage.showImage(charactersList[49]);
+                    cardImage.showImage(charactersList[board[position].id]);
+                    cardAttack.hideText();
+                    cardHP.hideText();
+                    cardDescription.showDescriptionText(magicDescriptionInfo[board[position].id]);
+                    cardName.showDescriptionText(board[position].cardName);
+                    cardType.showDescriptionText(board[position].cardType.ToString());
+                    break;
+                }
+        }
+
+    }
+
     internal int getMovingCardFrom()
     {
         return movingCardFrom;
@@ -260,10 +349,26 @@ public class CardManager : MonoBehaviour {
         movingPhase = false;
     }
 
+    public bool cardOnPositionExists(int position)
+    {
+        return cardOnBoard[position];
+    }
+
     public void highlightSprites()
     {
         heroController.highlightImage();
         supportController.highlightImage();
+    }
+
+    public void hideCardDetail()
+    {
+        backgroundImage.hideImage();
+        cardImage.hideImage();
+        cardAttack.hideText();
+        cardHP.hideText();
+        cardDescription.hideText();
+        cardName.hideText();
+        cardType.hideText();
     }
 
     public void addCard(int cardID, string cardName, string cardType, int cardHP, int cardAttack, int cardPassive, string cardDescription, int cardHealing, int cardIntercept)

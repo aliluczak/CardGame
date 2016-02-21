@@ -27,13 +27,10 @@ public class Menu : MonoBehaviour {
     private bool logButtonPressed;
     private bool registrationRequestSent;
     private bool logRequestSent;
-    
+
+    private bool registrationCardRequestSent;
+    private bool cardsReceived;
 	//keyboard
-	private string passw;
-	private string passConfirmation;
-	private string serverPort;
-	private string serverIP;
-	private string nickname;
 
     
 
@@ -92,6 +89,9 @@ public class Menu : MonoBehaviour {
 
         registrationKeyPressed = false;
         logButtonPressed = false;
+
+        registrationCardRequestSent = false;
+        cardsReceived = false;
 
     }
 
@@ -171,7 +171,16 @@ public class Menu : MonoBehaviour {
         if (!logButtonPressed)
         {
             setLogButtonPressed();
-            cardNetworkManager.connectToSerwer(PlayerPrefs.GetString("IP"), PlayerPrefs.GetInt("Port"));
+            try
+            {
+                cardNetworkManager.connectToSerwer(PlayerPrefs.GetString("IP"), PlayerPrefs.GetInt("Port"));
+                Debug.Log("Połączono z " + PlayerPrefs.GetString("IP") + ", " + PlayerPrefs.GetInt("Port").ToString());
+            }
+            catch
+            {
+                Debug.Log("Błąd połączenia");
+            }
+            Debug.Log("Połączono z " + PlayerPrefs.GetString("IP") + ", " + PlayerPrefs.GetInt("Port").ToString());
             StartCoroutine(LogUser(username, password));
         }
     }
@@ -268,6 +277,35 @@ public class Menu : MonoBehaviour {
         } 
     }
 
+    public void cardRequest()
+    {
+        if (!registrationCardRequestSent)
+        {
+            cardNetworkManager.connectToSerwer(PlayerPrefs.GetString("IP"), PlayerPrefs.GetInt("Port"));
+            StartCoroutine(waitForConnection());
+            registrationCardRequestSent = true;
+        }
+    }
+
+    IEnumerator waitForConnection()
+    {
+        while (playerNotConnected)
+        {
+            yield return null;
+        }
+        cardNetworkManager.sendRegistrationCardRequest();
+        StartCoroutine(waitForCards());
+
+    }
+
+    IEnumerator waitForCards()
+    {
+        while (!cardsReceived)
+        {
+            yield return null;
+        }
+
+    }
     public void finishRegistration()
     {
         if (!registrationKeyPressed)

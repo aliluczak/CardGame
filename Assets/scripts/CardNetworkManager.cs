@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
 
 public class MyMSGTypes
@@ -23,6 +24,7 @@ public class MyMSGTypes
     public static short DrawingCards = 1013;
     public static short WaitForAnotherPlayer = 1014;
     public static short Tie = 1022;
+    public static short OpponentName = 1024;
 
     // msgs sent from client
     public static short Register = 1016;
@@ -31,6 +33,7 @@ public class MyMSGTypes
     public static short CardAdded = 1019;
     public static short Magic = 1020;
     public static short endMovePhase = 1021;
+    public static short gameLoaded = 1023;
 
 }
 
@@ -56,6 +59,7 @@ public class CardNetworkManager : MonoBehaviour
     private CardManager cardManager;
     private Menu menu;
     private TextController textController;
+    public string playerName;
    
 
     //load all the needed objects and classes
@@ -78,7 +82,16 @@ public class CardNetworkManager : MonoBehaviour
         card = GameObject.Find("CardManager");
         cardManager = card.GetComponent<CardManager>();
         textInfoObject = GameObject.Find("Info");
-        textController = textInfoObject.GetComponent<TextController>();
+    }
+
+
+
+    void OnLevelWasLoaded(int level)
+    {
+        if (level == 1)
+        {
+            textController = GameObject.Find("TextController").GetComponent<TextController>();
+        }
     }
 
     //get and set for connection IP
@@ -122,8 +135,9 @@ public class CardNetworkManager : MonoBehaviour
         try
         {
             client = new NetworkClient();
-            client.Connect(connectionIP, connectionPort);
             registerHandlers();
+            client.Connect(connectionIP, connectionPort);
+
         }
         catch (Exception)
         {
@@ -133,8 +147,8 @@ public class CardNetworkManager : MonoBehaviour
 
     private void registerHandlers()
     {
+        client.RegisterHandler(MsgType.Connect, OnConnected);
         client.RegisterHandler(MyMSGTypes.SendCard, addCard);
-    //    client.RegisterHandler(MyMSGTypes.CardRequest, );
         client.RegisterHandler(MyMSGTypes.NoCard, noCard);
         //      client.RegisterHandler(MyMSGTypes.Win, Win);
         //     client.RegisterHandler(MyMSGTypes.Lose, Lose);
@@ -148,6 +162,7 @@ public class CardNetworkManager : MonoBehaviour
         client.RegisterHandler(MyMSGTypes.MovingPhaseBegins, movingPhaseBegins);
         client.RegisterHandler(MyMSGTypes.DrawingCards, drawingCards);
         client.RegisterHandler(MyMSGTypes.WaitForAnotherPlayer, waitForAnotherPlayer);
+        client.RegisterHandler(MyMSGTypes.OpponentName, setOpponentName);
     }
     
   //  public static short Tie = 1022;
@@ -162,8 +177,8 @@ public class CardNetworkManager : MonoBehaviour
     internal void registerUser(string username, string password)
     {
         RegisterLoginMessage msg = new RegisterLoginMessage();
-        msg.userData[0] = username;
-        msg.userData[1] = password;
+        msg.login = username;
+        msg.password = password;
         client.Send(MyMSGTypes.Register, msg);
     }
 
@@ -171,12 +186,13 @@ public class CardNetworkManager : MonoBehaviour
     internal void loginUser(string username, string password)
     {
         RegisterLoginMessage msg = new RegisterLoginMessage();
-        msg.userData[0] = username;
-        msg.userData[1] = password;
+        msg.login = username;
+        msg.password = password;
         client.Send(MyMSGTypes.Login, msg);
+        playerName = username;
     }
 
-    void OnConnectedToServer()
+    public void OnConnected(NetworkMessage msg)
     {
         menu.playerNotConnected = false;
     }
@@ -185,7 +201,7 @@ public class CardNetworkManager : MonoBehaviour
     {
         Debug.Log("Disconnected from server");
     }
-
+   
     internal void sendMoveCardRequest(int from, int to)
     {
         MoveMessage msg = new MoveMessage();
@@ -194,6 +210,17 @@ public class CardNetworkManager : MonoBehaviour
         client.Send(MyMSGTypes.MoveCardRequest, msg);
     }
  
+    internal void sendRegistrationCardRequest()
+    {
+        var msg = new IntegerMessage();
+        client.Send(MyMSGTypes.CardRequest, msg);
+    }
+
+    internal void sendGameLoadedInfo()
+    {
+        var msg = new IntegerMessage();
+        client.Send(MyMSGTypes.gameLoaded, msg);
+    }
 
 
     // RPCs received from server
@@ -272,7 +299,14 @@ public class CardNetworkManager : MonoBehaviour
 
     void waitForAnotherPlayer(NetworkMessage msg)
     {
+        textController.showTextMessage("Oczekiwanie na drugiego gracza");
+    }
 
+    void setOpponentName(NetworkMessage msg)
+    {
+        StringMessage name = msg.ReadMessage<StringMessage>();
+        cardManager.enemyName.text = name.value;
+        cardManager.enemyHP.text = "10";
     }
 
 

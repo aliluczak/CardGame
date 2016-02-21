@@ -36,11 +36,13 @@ public class GameButtonController : MonoBehaviour {
     internal void applyMove()
     {
         cardNetworkManager.sendMoveCardRequest(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+        cardManager.hideCardDetail();
     }
 
     internal void cancelMove()
     {
         cardManager.cancelMove(cardManager.getMovingCardFrom(), cardManager.getMovingCardTo());
+        cardManager.hideCardDetail();
     }
 
     internal void endMove()

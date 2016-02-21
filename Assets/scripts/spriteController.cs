@@ -8,6 +8,8 @@ public class spriteController : MonoBehaviour {
     private CardManager cardManager;
     private Sprite texture;
     private SpriteRenderer renderer;
+
+    
 	// Use this for initialization
 	void Start () 
     {
@@ -15,7 +17,8 @@ public class spriteController : MonoBehaviour {
         cardManager = cardManagerObject.GetComponent<CardManager>();
         texture = gameObject.GetComponent<Sprite>();
         renderer = gameObject.GetComponent<SpriteRenderer>();
-	}
+       
+    }
 
     void OnMouseDown()
     {
@@ -26,18 +29,22 @@ public class spriteController : MonoBehaviour {
                 case "RandomHero":
                     {
                         cardManager.setCardSelected(2);
+                        cardManager.showCardDetail(2);
                         cardManager.highlightSprites();
+
                         break;
                     }
                 case "RandomCard1":
                     {
                         cardManager.setCardSelected(3);
+                        cardManager.showCardDetail(3);
                         cardManager.highlightSprites();
                         break;
                     }
                 case "RandowmCard2":
                     {
                         cardManager.setCardSelected(4);
+                        cardManager.showCardDetail(4);
                         cardManager.highlightSprites();
                         break;
                     }
@@ -48,6 +55,10 @@ public class spriteController : MonoBehaviour {
                             cardManager.tryMoveCard(cardManager.whichCardSelected(), 0);
                         }
 
+                        if (cardManager.cardOnPositionExists(0))
+                        {
+                            cardManager.showCardDetail(0);
+                        }
                         break;
                     }
                 case "Support":
@@ -55,6 +66,11 @@ public class spriteController : MonoBehaviour {
                         if (cardManager.whichCardSelected() != -1)
                         {
                             cardManager.tryMoveCard(cardManager.whichCardSelected(), 1);
+                        }
+
+                        if (cardManager.cardOnPositionExists(1))
+                        {
+                            cardManager.showCardDetail(1);
                         }
                         break;
                     }

@@ -7,19 +7,16 @@ internal class Card : MonoBehaviour
 
     internal string cardName;
 	internal enum CardType { HERO, SPELL};
-    private int id;
-    private int cardHP;
-    private int cardAttack;
-    private int cardPassive;
-    private string cardDescription; 
-    private int cardHealing;
-    private int cardIntercept;
+    public int id;
+    public int cardHP;
+    public int cardAttack;
+    public int cardPassive;
+    public string cardDescription; 
+    public int cardHealing;
+    public int cardIntercept;
     internal CardType cardType;
     private int actualPosition;
-    private int cardID;
-    private string cardName1;
-    private string cardType1;
-    private int p;
+
 
     public Card(int cardID, string cardNameParameter, string type, int HP, int attack, int passive, string description, int healing, int intercept, int position)
     {
